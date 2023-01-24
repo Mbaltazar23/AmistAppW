@@ -8,6 +8,7 @@
 class AdminColegioModel extends Mysql {
 
     public $intIdUsuario;
+    public $strNombre;
     public $strEmail;
     public $strPassword;
     public $strDni;
@@ -21,37 +22,48 @@ class AdminColegioModel extends Mysql {
     }
 
     public function selectAdmins($option = NULL) {
-        $this->intStatus = $option != NULL ? " AND usuarios.status != 0" : "";
+        $this->intStatus = $option != NULL ? " AND usr.status != 0" : "";
         $this->strRole = ROLADMINCOLE;
-        $sql = "SELECT usuarios.id, usuarios.email, usuarios.dni, usuarios.direccion, usuarios.telefono, usuarios.status, roles_usuarios.role 
-                FROM usuarios INNER JOIN roles_usuarios ON usuarios.id = roles_usuarios.user_id 
-                WHERE roles_usuarios.role = '$this->strRole' $this->intStatus";
+        $sql = "SELECT usr.id, usr.nombre, usr.email, usr.dni, usr.direccion, usr.telefono, usr.status, rl.role 
+                FROM usuarios usr INNER JOIN roles_usuarios rl ON usr.id = rl.user_id 
+                WHERE rl.role = '$this->strRole' $this->intStatus";
         $request = $this->select_all($sql);
         return $request;
     }
 
-    public function insertAdmin(string $email, string $password, string $dni, string $direccion, string $telefono, int $status, string $role) {
+    public function selectAdmin(int $idUser) {
+        $this->intIdUsuario = $idUser;
+        $sql = "SELECT usr.id, usr.nombre, usr.email, usr.dni, usr.direccion,
+                usr.telefono, DATE_FORMAT(usr.created_at, '%d/%m/%Y') as fecha, DATE_FORMAT(usr.created_at, '%H:%i:%s') as hora,
+                usr.status, rl.role FROM usuarios usr INNER JOIN roles_usuarios rl ON usr.id = rl.user_id 
+                WHERE usr.id = $this->intIdUsuario";
+        $request = $this->select($sql);
+        return $request;
+    }
+
+    public function insertAdmin(string $nombre, string $email, string $password, string $dni, string $direccion, string $telefono, string $role) {
+        $this->strNombre = $nombre;
         $this->strEmail = $email;
         $this->strPassword = $password;
         $this->strDni = $dni;
         $this->strDireccion = $direccion;
         $this->strTelefono = $telefono;
-        $this->intStatus = $status;
         $this->strRole = $role;
         $return = 0;
         $sql = "SELECT * FROM usuarios WHERE email = '{$this->strEmail}' OR dni = '{$this->strDni}'";
         $request = $this->select_all($sql);
         if (empty($request)) {
-            $query_insert = "INSERT INTO usuarios(email,password,dni,direccion,telefono,status) VALUES(?,?,?,?,?,?)";
-            $arrData = array($this->strEmail,
+            $query_insert = "INSERT INTO usuarios(nombre,email,password,dni,direccion,telefono) VALUES(?,?,?,?,?,?)";
+            $arrData = array($this->strNombre,
+                $this->strEmail,
                 $this->strPassword,
                 $this->strDni,
                 $this->strDireccion,
-                $this->strTelefono,
-                $this->intStatus);
+                $this->strTelefono);
             $request_insert = $this->insert($query_insert, $arrData);
             $query_insert_role = "INSERT INTO roles_usuarios (user_id, role) VALUES (?,?)";
-            $arrData_role = array($request_insert, $this->strRole);
+            $arrData_role = array($request_insert,
+                $this->strRole);
             $this->insert($query_insert_role, $arrData_role);
 
             $return = $request_insert;
@@ -61,8 +73,9 @@ class AdminColegioModel extends Mysql {
         return $return;
     }
 
-    public function updateAdmin(int $idusuario, string $email, string $password, string $dni, string $direccion, string $telefono) {
+    public function updateAdmin(int $idusuario, string $nombre, string $email, string $password, string $dni, string $direccion, string $telefono) {
         $this->intIdusuario = $idusuario;
+        $this->strNombre = $nombre;
         $this->strEmail = $email;
         $this->strPassword = $password;
         $this->strDni = $dni;
@@ -71,8 +84,10 @@ class AdminColegioModel extends Mysql {
         $sql = "SELECT * FROM usuarios WHERE email = '{$this->strEmail}' OR id != '{$this->intIdUsuario}'";
         $request = $this->select_all($sql);
         if (empty($request)) {
-            $query_update = "UPDATE usuarios SET email = ?, password = ?, dni = ?, direccion = ?, telefono = ? WHERE id = $this->intIdusuario";
-            $arrData = array($this->strEmail,
+            $query_update = "UPDATE usuarios SET nombre = ?, email = ?, password = ?, dni = ?,"
+                    . " direccion = ?, telefono = ? WHERE id = $this->intIdusuario";
+            $arrData = array($this->strNombre,
+                $this->strEmail,
                 $this->strPassword,
                 $this->strDni,
                 $this->strDireccion,

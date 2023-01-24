@@ -27,8 +27,9 @@ class HomeModel extends Mysql {
     public function sessionLogin(int $iduser) {
         $this->id = $iduser;
         //BUSCAR USUARIO 
-        $sql = "SELECT user.id,user.dni, user.nombre, user.email, user.password, user.created_at, user.status, r.role as nombreRol, user.status "
-                . "FROM usuarios user INNER JOIN roles_usuarios r ON user.id = r.user_id WHERE user.id = $this->id";
+        $sql = "SELECT user.id,user.dni, user.nombre, user.email,user.telefono, user.password, user.created_at, user.direccion,"
+                . " user.status, r.role as nombreRol, user.status FROM usuarios user INNER JOIN roles_usuarios r ON user.id = r.user_id "
+                . "WHERE user.id = $this->id";
         $request = $this->select($sql);
         $_SESSION['userData'] = $request;
 

@@ -18,33 +18,32 @@ class ColegiosModel extends Mysql {
     }
 
     public function selectColegios($option = NULL) {
-        $this->intStatus = $option != NULL ? "WHERE status != 0" : "";
-        $sql = "SELECT c.id, c.nombre, c.rut, c.direccion, c.telefono, c.status, u.email, u.dni 
-            FROM colegios c INNER JOIN colegios_usuarios cu ON c.id = cu.colegio_id 
-            INNER JOIN usuarios u ON cu.user_id = u.id $this->intStatus";
+        $this->intStatus = $option != NULL ? "WHERE c.status != 0" : "";
+        $sql = "SELECT c.id, c.nombre, DATE_FORMAT(c.created_at, '%d/%m/%Y') as fecha, 
+            DATE_FORMAT(c.created_at, '%H:%i:%s') as hora,c.rut, c.direccion, c.telefono, c.status, u.email, u.dni 
+            FROM colegios c $this->intStatus";
         $request = $this->select_all($sql);
         return $request;
     }
 
     public function selectColegio(int $idColegio) {
         $this->intIdColegio = $idColegio;
-        $sql = "SELECT c.id, c.nombre, c.rut, c.direccion, c.telefono, c.status, u.email, u.dni 
-            FROM colegios c INNER JOIN colegios_usuarios cu ON c.id = cu.colegio_id 
-            INNER JOIN usuarios u ON cu.user_id = u.id WHERE c.id = $this->intIdColegio";
+        $sql = "SELECT c.id, c.nombre, c.rut,DATE_FORMAT(c.created_at, '%d/%m/%Y') as fecha, 
+            DATE_FORMAT(c.created_at, '%H:%i:%s') as hora FROM colegios c WHERE c.id = $this->intIdColegio";
         $request = $this->select($sql);
         return $request;
     }
 
     public function insertColegio(string $nombre, string $rut, string $direccion, string $telefono) {
-        $return = 0;
         $this->strNombre = $nombre;
         $this->strRut = $rut;
         $this->strDireccion = $direccion;
         $this->strTelefono = $telefono;
+        $return = 0;
         $sql = "SELECT * FROM colegios WHERE rut = '{$this->strRut}' ";
         $request = $this->select_all($sql);
         if (empty($request)) {
-            $query_insert = "INSERT INTO colegios (nombre, rut, direccion, telefono, status) VALUES (?,?,?,?,1)";
+            $query_insert = "INSERT INTO colegios (nombre, rut, direccion, telefono) VALUES (?,?,?,?)";
             $arrData = array($this->strNombre,
                 $this->strRut,
                 $this->strDireccion,
@@ -57,7 +56,7 @@ class ColegiosModel extends Mysql {
         return $return;
     }
 
-    public function updateColegio($id, $nombre, $rut, $direccion, $telefono) {
+    public function updateColegio(int $id, string $nombre,string $rut,string $direccion, string $telefono) {
         $this->intIdcolegio = $id;
         $this->strNombre = $nombre;
         $this->strRut = $rut;

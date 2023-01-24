@@ -19,11 +19,10 @@ class AccionesModel extends Mysql {
     public function selectAcciones($opcion = NULL) {
         $validateStatus = "";
         if ($opcion != NULL) {
-            $validateStatus = "WHERE ac.statusAccion != 0";
+            $validateStatus = "WHERE ac.status != 0";
         }
         $sql = "SELECT ac.nombre, ac.puntos, DATE_FORMAT(ac.created_at, '%d/%m/%Y') as fecha, 
-            DATE_FORMAT(ac.created_at, '%H:%i:%s') as hora, pt.puntos FROM acciones ac INNER JOIN puntaje pt 
-            ON ac.score_id = pt.ids $validateStatus";
+            DATE_FORMAT(ac.created_at, '%H:%i:%s') as hora, pt.puntos FROM acciones ac $validateStatus";
         $request = $this->select_all($sql);
         return $request;
     }
@@ -31,8 +30,7 @@ class AccionesModel extends Mysql {
     public function selectAccion(int $idAccion) {
         $this->idAccion = $idAccion;
         $sql = "SELECT ac.nombre, ac.puntos, DATE_FORMAT(ac.created_at, '%d/%m/%Y') as fecha, 
-            DATE_FORMAT(ac.created_at, '%H:%i:%s') as hora, pt.puntos FROM acciones ac INNER JOIN puntaje pt 
-            ON ac.score_id = pt.id WHERE ac.id = $this->idAccion;";
+            DATE_FORMAT(ac.created_at, '%H:%i:%s') as hora, pt.puntos FROM acciones ac WHERE ac.id = $this->idAccion;";
         $request = $this->select($sql);
         return $request;
     }
@@ -41,14 +39,12 @@ class AccionesModel extends Mysql {
         $this->nombreAccion = $nombre;
         $this->puntosAccion = $puntos;
         $return = 0;
-        $sql = "SELECT * FROM acciones WHERE nombre = '$this->nombreAccion' AND score_id = $this->puntosAccion ";
+        $sql = "SELECT * FROM acciones WHERE nombre = '$this->nombreAccion'";
         $request = $this->select_all($sql);
         if (empty($request)) {
-            $query_insert = "INSERT INTO acciones(nombre, score_id) VALUES (?,?,?,?)";
-            $arrData = array($this->nombre,
-                $this->puntos,
-                $this->status,
-                $this->score_id);
+            $query_insert = "INSERT INTO acciones(nombre, puntos) VALUES (?,?)";
+            $arrData = array($this->nombreAccion,
+                $this->puntosAccion);
             $request_insert = $this->insert($query_insert, $arrData);
             $return = $request_insert;
         } else {
@@ -64,10 +60,9 @@ class AccionesModel extends Mysql {
         $sql = "SELECT * FROM acciones WHERE nombre = '$this->nombreAccion' AND id != $this->idAccion";
         $request = $this->select_all($sql);
         if (empty($request)) {
-            $sql = "UPDATE acciones SET nombre = ?, score_id = ? WHERE id = ?";
+            $sql = "UPDATE acciones SET nombre = ?, puntos = ? WHERE id = $this->idAccion";
             $params = array($this->nombreAccion,
-                $this->puntosAccion,
-                $this->idAccion);
+                $this->puntosAccion);
             $request = $this->update($sql, $params);
         } else {
             $request = "exist";
@@ -78,11 +73,11 @@ class AccionesModel extends Mysql {
     public function updateStatusAccion(int $idAccion, int $status) {
         $this->idAccion = $idAccion;
         $this->statusAccion = $status;
-        $sql = "SELECT * FROM usuarios_puntaje WHERE action_id  = $this->idAccion";
+        $sql = "SELECT * FROM puntos_alumnos_envio WHERE action_id  = $this->idAccion";
         $request = $this->select_all($sql);
         if (empty($request)) {
             $sql = "UPDATE acciones SET status = ? WHERE id = $this->idAccion";
-            $params = array($this->status);
+            $params = array($this->statusAccion);
             $request = $this->update($sql, $params);
             if ($request) {
                 $request = 'ok';

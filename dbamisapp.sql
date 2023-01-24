@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-01-2023 a las 00:45:44
+-- Tiempo de generación: 23-01-2023 a las 23:43:12
 -- Versión del servidor: 10.4.6-MariaDB
 -- Versión de PHP: 7.3.9
 
@@ -19,32 +19,37 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `dbamisapp`
+-- Base de datos: `amistapp`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `acuerdos`
+-- Estructura de tabla para la tabla `acciones`
 --
 
-CREATE TABLE `acuerdos` (
+CREATE TABLE `acciones` (
   `id` int(11) NOT NULL,
-  `nombre_cafeteria` varchar(255) NOT NULL,
-  `id_producto` int(11) NOT NULL,
-  `codigo_qr` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `score_id` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `puntos` int(11) NOT NULL,
+  `status` int(11) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `acuerdo_tarea`
+-- Estructura de tabla para la tabla `canjear_productos`
 --
 
-CREATE TABLE `acuerdo_tarea` (
+CREATE TABLE `canjear_productos` (
   `id` int(11) NOT NULL,
-  `id_acuerdo` int(11) NOT NULL,
-  `id_tarea` int(11) NOT NULL
+  `product_id` int(11) NOT NULL,
+  `puntos` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -56,22 +61,77 @@ CREATE TABLE `acuerdo_tarea` (
 CREATE TABLE `categorias` (
   `id` int(11) NOT NULL,
   `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `status` int(11) DEFAULT 1
+  `status` int(11) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `categorias`
+--
+
+INSERT INTO `categorias` (`id`, `nombre`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Lapiz', 1, '2023-01-21 02:42:02', '2023-01-21 02:55:27'),
+(2, 'Pulseras', 1, '2023-01-21 02:46:25', '2023-01-21 02:55:39'),
+(3, 'Cuarderno', 1, '2023-01-21 16:05:45', '2023-01-21 16:05:45');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `colegios`
+--
+
+CREATE TABLE `colegios` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `rut` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
+  `direccion` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `telefono` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
+  `status` int(11) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `encomiendas`
+-- Estructura de tabla para la tabla `colegios_usuarios`
 --
 
-CREATE TABLE `encomiendas` (
+CREATE TABLE `colegios_usuarios` (
   `id` int(11) NOT NULL,
-  `id_premio` int(11) NOT NULL,
-  `id_estudiante` int(11) NOT NULL,
-  `fecha` date NOT NULL,
-  `recibido` enum('si','no') COLLATE utf8_spanish_ci DEFAULT NULL,
-  `encargado_convivencia` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL
+  `colegio_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `compras`
+--
+
+CREATE TABLE `compras` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `points` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cursos`
+--
+
+CREATE TABLE `cursos` (
+  `id` int(11) NOT NULL,
+  `school_id` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `status` int(11) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -82,58 +142,23 @@ CREATE TABLE `encomiendas` (
 
 CREATE TABLE `estudiantes` (
   `id` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `puntos` int(11) DEFAULT 100
+  `curso_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `status` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `estudiante_acuerdo_tarea`
+-- Estructura de tabla para la tabla `notificaciones`
 --
 
-CREATE TABLE `estudiante_acuerdo_tarea` (
+CREATE TABLE `notificaciones` (
   `id` int(11) NOT NULL,
-  `id_estudiante_tarea` int(11) NOT NULL,
-  `id_acuerdo_tarea` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `estudiante_tarea`
---
-
-CREATE TABLE `estudiante_tarea` (
-  `id` int(11) NOT NULL,
-  `id_estudiante` int(11) NOT NULL,
-  `id_tarea` int(11) NOT NULL,
-  `puntos` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `materias`
---
-
-CREATE TABLE `materias` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `premios`
---
-
-CREATE TABLE `premios` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `descripcion` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `puntos` int(11) NOT NULL,
-  `tipo` enum('tangible','intangible') COLLATE utf8_spanish_ci DEFAULT NULL
+  `mensaje` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `status` int(11) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -144,12 +169,22 @@ CREATE TABLE `premios` (
 
 CREATE TABLE `productos` (
   `id` int(11) NOT NULL,
+  `categoria_id` int(11) NOT NULL,
   `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `imagen` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
   `precio` decimal(10,2) NOT NULL,
-  `descripcion` text COLLATE utf8_spanish_ci NOT NULL,
-  `id_categoria` int(11) NOT NULL,
-  `status` int(11) DEFAULT 1
+  `stock` int(11) NOT NULL,
+  `status` int(11) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `productos`
+--
+
+INSERT INTO `productos` (`id`, `categoria_id`, `nombre`, `imagen`, `precio`, `stock`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Lapiz Azul', 'prod_e776d362fef2aa831fef83fa69ff38c8.jpg', '250.00', 15, 1, '2023-01-22 04:09:02', '2023-01-23 03:01:01');
 
 -- --------------------------------------------------------
 
@@ -159,45 +194,58 @@ CREATE TABLE `productos` (
 
 CREATE TABLE `profesores` (
   `id` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `puntos` int(11) DEFAULT 500,
-  `id_materia` int(11) NOT NULL,
-  `fecha_ingreso` timestamp NOT NULL DEFAULT current_timestamp()
+  `curso_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `status` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `roles`
+-- Estructura de tabla para la tabla `puntaje`
 --
 
-CREATE TABLE `roles` (
+CREATE TABLE `puntaje` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `roles`
---
-
-INSERT INTO `roles` (`id`, `nombre`) VALUES
-(1, 'Administrador'),
-(2, 'Alumno'),
-(3, 'Profesor');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tareas`
---
-
-CREATE TABLE `tareas` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `descripcion` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
   `puntos` int(11) NOT NULL,
-  `status` int(11) NOT NULL DEFAULT 1
+  `status` int(11) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `recoleccion_puntaje`
+--
+
+CREATE TABLE `recoleccion_puntaje` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `score_id` int(11) NOT NULL,
+  `status` int(11) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `roles_usuarios`
+--
+
+CREATE TABLE `roles_usuarios` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `role` enum('Administrador','Admin.Colegio','Alumno','Profesor') COLLATE utf8_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `roles_usuarios`
+--
+
+INSERT INTO `roles_usuarios` (`id`, `user_id`, `role`) VALUES
+(1, 1, 'Administrador');
 
 -- --------------------------------------------------------
 
@@ -207,60 +255,68 @@ CREATE TABLE `tareas` (
 
 CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
-  `dni` varchar(19) COLLATE utf8_spanish_ci NOT NULL,
-  `nombre` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `correo` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `telefono` varchar(18) COLLATE utf8_spanish_ci NOT NULL,
-  `contrasena` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
-  `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp(),
-  `direccion` varchar(255) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `status` int(11) NOT NULL DEFAULT 1
+  `nombre` varchar(150) COLLATE utf8_spanish_ci NOT NULL DEFAULT '',
+  `email` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `dni` varchar(255) COLLATE utf8_spanish_ci NOT NULL,
+  `telefono` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
+  `status` int(11) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `direccion` varchar(255) COLLATE utf8_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `dni`, `nombre`, `correo`, `telefono`, `contrasena`, `fecha_registro`, `direccion`, `status`) VALUES
-(1, '19.492.929-5', 'Jose', 'Jose45@gmail.com', '+56987453423', 'f6a983f917fcb29b157dc9cd95216cf0', '2023-01-18 21:26:54', 'Temuco en casita', 1);
+INSERT INTO `usuarios` (`id`, `nombre`, `email`, `password`, `dni`, `telefono`, `status`, `created_at`, `updated_at`, `direccion`) VALUES
+(1, 'Jose', 'Jose45@gmail.com', 'f6a983f917fcb29b157dc9cd95216cf0', '19.492.929-5', '+56987453423', 1, '2023-01-19 19:53:12', '2023-01-19 19:53:12', 'Temuco en casita');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuario_roles`
+-- Estructura de tabla para la tabla `usuarios_puntaje`
 --
 
-CREATE TABLE `usuario_roles` (
+CREATE TABLE `usuarios_puntaje` (
   `id` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_rol` int(11) NOT NULL
+  `user_id` int(11) NOT NULL,
+  `action_id` int(11) NOT NULL,
+  `status` int(11) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `usuario_roles`
+-- Estructura de tabla para la tabla `usuario_notificaciones`
 --
 
-INSERT INTO `usuario_roles` (`id`, `id_usuario`, `id_rol`) VALUES
-(1, 1, 1);
+CREATE TABLE `usuario_notificaciones` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `notificacion_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Índices para tablas volcadas
 --
 
 --
--- Indices de la tabla `acuerdos`
+-- Indices de la tabla `acciones`
 --
-ALTER TABLE `acuerdos`
+ALTER TABLE `acciones`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_producto` (`id_producto`);
+  ADD KEY `score_id` (`score_id`);
 
 --
--- Indices de la tabla `acuerdo_tarea`
+-- Indices de la tabla `canjear_productos`
 --
-ALTER TABLE `acuerdo_tarea`
+ALTER TABLE `canjear_productos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_acuerdo` (`id_acuerdo`),
-  ADD KEY `id_tarea` (`id_tarea`);
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Indices de la tabla `categorias`
@@ -269,46 +325,46 @@ ALTER TABLE `categorias`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `encomiendas`
+-- Indices de la tabla `colegios`
 --
-ALTER TABLE `encomiendas`
+ALTER TABLE `colegios`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `colegios_usuarios`
+--
+ALTER TABLE `colegios_usuarios`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_premio` (`id_premio`),
-  ADD KEY `id_estudiante` (`id_estudiante`);
+  ADD KEY `colegio_id` (`colegio_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indices de la tabla `compras`
+--
+ALTER TABLE `compras`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
+-- Indices de la tabla `cursos`
+--
+ALTER TABLE `cursos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `school_id` (`school_id`);
 
 --
 -- Indices de la tabla `estudiantes`
 --
 ALTER TABLE `estudiantes`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_usuario` (`id_usuario`);
+  ADD KEY `curso_id` (`curso_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
--- Indices de la tabla `estudiante_acuerdo_tarea`
+-- Indices de la tabla `notificaciones`
 --
-ALTER TABLE `estudiante_acuerdo_tarea`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_estudiante_tarea` (`id_estudiante_tarea`),
-  ADD KEY `id_acuerdo_tarea` (`id_acuerdo_tarea`);
-
---
--- Indices de la tabla `estudiante_tarea`
---
-ALTER TABLE `estudiante_tarea`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_estudiante` (`id_estudiante`),
-  ADD KEY `id_tarea` (`id_tarea`);
-
---
--- Indices de la tabla `materias`
---
-ALTER TABLE `materias`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `premios`
---
-ALTER TABLE `premios`
+ALTER TABLE `notificaciones`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -316,27 +372,36 @@ ALTER TABLE `premios`
 --
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_categoria` (`id_categoria`);
+  ADD KEY `categoria_id` (`categoria_id`);
 
 --
 -- Indices de la tabla `profesores`
 --
 ALTER TABLE `profesores`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_usuario` (`id_usuario`),
-  ADD KEY `id_materia` (`id_materia`);
+  ADD KEY `curso_id` (`curso_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
--- Indices de la tabla `roles`
+-- Indices de la tabla `puntaje`
 --
-ALTER TABLE `roles`
+ALTER TABLE `puntaje`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `tareas`
+-- Indices de la tabla `recoleccion_puntaje`
 --
-ALTER TABLE `tareas`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `recoleccion_puntaje`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `score_id` (`score_id`);
+
+--
+-- Indices de la tabla `roles_usuarios`
+--
+ALTER TABLE `roles_usuarios`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -345,70 +410,108 @@ ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `usuario_roles`
+-- Indices de la tabla `usuarios_puntaje`
 --
-ALTER TABLE `usuario_roles`
+ALTER TABLE `usuarios_puntaje`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_usuario` (`id_usuario`),
-  ADD KEY `id_rol` (`id_rol`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `action_id` (`action_id`);
+
+--
+-- Indices de la tabla `usuario_notificaciones`
+--
+ALTER TABLE `usuario_notificaciones`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `notificacion_id` (`notificacion_id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT de la tabla `acuerdos`
+-- AUTO_INCREMENT de la tabla `acciones`
 --
-ALTER TABLE `acuerdos`
+ALTER TABLE `acciones`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `acuerdo_tarea`
+-- AUTO_INCREMENT de la tabla `canjear_productos`
 --
-ALTER TABLE `acuerdo_tarea`
+ALTER TABLE `canjear_productos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `encomiendas`
+-- AUTO_INCREMENT de la tabla `categorias`
 --
-ALTER TABLE `encomiendas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `estudiante_acuerdo_tarea`
---
-ALTER TABLE `estudiante_acuerdo_tarea`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `estudiante_tarea`
---
-ALTER TABLE `estudiante_tarea`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `materias`
---
-ALTER TABLE `materias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `premios`
---
-ALTER TABLE `premios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `roles`
---
-ALTER TABLE `roles`
+ALTER TABLE `categorias`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `tareas`
+-- AUTO_INCREMENT de la tabla `colegios`
 --
-ALTER TABLE `tareas`
+ALTER TABLE `colegios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `colegios_usuarios`
+--
+ALTER TABLE `colegios_usuarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `compras`
+--
+ALTER TABLE `compras`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `cursos`
+--
+ALTER TABLE `cursos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `estudiantes`
+--
+ALTER TABLE `estudiantes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `notificaciones`
+--
+ALTER TABLE `notificaciones`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `productos`
+--
+ALTER TABLE `productos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `profesores`
+--
+ALTER TABLE `profesores`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `puntaje`
+--
+ALTER TABLE `puntaje`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `recoleccion_puntaje`
+--
+ALTER TABLE `recoleccion_puntaje`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `roles_usuarios`
+--
+ALTER TABLE `roles_usuarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
@@ -417,74 +520,99 @@ ALTER TABLE `usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT de la tabla `usuario_roles`
+-- AUTO_INCREMENT de la tabla `usuarios_puntaje`
 --
-ALTER TABLE `usuario_roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `usuarios_puntaje`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario_notificaciones`
+--
+ALTER TABLE `usuario_notificaciones`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
 --
 
 --
--- Filtros para la tabla `acuerdos`
+-- Filtros para la tabla `acciones`
 --
-ALTER TABLE `acuerdos`
-  ADD CONSTRAINT `acuerdos_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id`);
+ALTER TABLE `acciones`
+  ADD CONSTRAINT `acciones_ibfk_1` FOREIGN KEY (`score_id`) REFERENCES `puntaje` (`id`);
 
 --
--- Filtros para la tabla `acuerdo_tarea`
+-- Filtros para la tabla `canjear_productos`
 --
-ALTER TABLE `acuerdo_tarea`
-  ADD CONSTRAINT `acuerdo_tarea_ibfk_1` FOREIGN KEY (`id_acuerdo`) REFERENCES `acuerdos` (`id`),
-  ADD CONSTRAINT `acuerdo_tarea_ibfk_2` FOREIGN KEY (`id_tarea`) REFERENCES `tareas` (`id`);
+ALTER TABLE `canjear_productos`
+  ADD CONSTRAINT `canjear_productos_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `productos` (`id`);
 
 --
--- Filtros para la tabla `encomiendas`
+-- Filtros para la tabla `colegios_usuarios`
 --
-ALTER TABLE `encomiendas`
-  ADD CONSTRAINT `encomiendas_ibfk_1` FOREIGN KEY (`id_premio`) REFERENCES `premios` (`id`),
-  ADD CONSTRAINT `encomiendas_ibfk_2` FOREIGN KEY (`id_estudiante`) REFERENCES `estudiantes` (`id`);
+ALTER TABLE `colegios_usuarios`
+  ADD CONSTRAINT `colegios_usuarios_ibfk_1` FOREIGN KEY (`colegio_id`) REFERENCES `colegios` (`id`),
+  ADD CONSTRAINT `colegios_usuarios_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`);
+
+--
+-- Filtros para la tabla `compras`
+--
+ALTER TABLE `compras`
+  ADD CONSTRAINT `compras_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `compras_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `productos` (`id`);
+
+--
+-- Filtros para la tabla `cursos`
+--
+ALTER TABLE `cursos`
+  ADD CONSTRAINT `cursos_ibfk_1` FOREIGN KEY (`school_id`) REFERENCES `colegios` (`id`);
 
 --
 -- Filtros para la tabla `estudiantes`
 --
 ALTER TABLE `estudiantes`
-  ADD CONSTRAINT `estudiantes_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`);
-
---
--- Filtros para la tabla `estudiante_acuerdo_tarea`
---
-ALTER TABLE `estudiante_acuerdo_tarea`
-  ADD CONSTRAINT `estudiante_acuerdo_tarea_ibfk_1` FOREIGN KEY (`id_estudiante_tarea`) REFERENCES `estudiante_tarea` (`id`),
-  ADD CONSTRAINT `estudiante_acuerdo_tarea_ibfk_2` FOREIGN KEY (`id_acuerdo_tarea`) REFERENCES `acuerdo_tarea` (`id`);
-
---
--- Filtros para la tabla `estudiante_tarea`
---
-ALTER TABLE `estudiante_tarea`
-  ADD CONSTRAINT `estudiante_tarea_ibfk_1` FOREIGN KEY (`id_estudiante`) REFERENCES `estudiantes` (`id`),
-  ADD CONSTRAINT `estudiante_tarea_ibfk_2` FOREIGN KEY (`id_tarea`) REFERENCES `tareas` (`id`);
+  ADD CONSTRAINT `estudiantes_ibfk_1` FOREIGN KEY (`curso_id`) REFERENCES `cursos` (`id`),
+  ADD CONSTRAINT `estudiantes_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`);
 
 --
 -- Filtros para la tabla `productos`
 --
 ALTER TABLE `productos`
-  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_categoria`) REFERENCES `categorias` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`);
 
 --
 -- Filtros para la tabla `profesores`
 --
 ALTER TABLE `profesores`
-  ADD CONSTRAINT `profesores_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`),
-  ADD CONSTRAINT `profesores_ibfk_2` FOREIGN KEY (`id_materia`) REFERENCES `materias` (`id`);
+  ADD CONSTRAINT `profesores_ibfk_1` FOREIGN KEY (`curso_id`) REFERENCES `cursos` (`id`),
+  ADD CONSTRAINT `profesores_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`);
 
 --
--- Filtros para la tabla `usuario_roles`
+-- Filtros para la tabla `recoleccion_puntaje`
 --
-ALTER TABLE `usuario_roles`
-  ADD CONSTRAINT `usuario_roles_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`),
-  ADD CONSTRAINT `usuario_roles_ibfk_2` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id`);
+ALTER TABLE `recoleccion_puntaje`
+  ADD CONSTRAINT `recoleccion_puntaje_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `recoleccion_puntaje_ibfk_2` FOREIGN KEY (`score_id`) REFERENCES `puntaje` (`id`);
+
+--
+-- Filtros para la tabla `roles_usuarios`
+--
+ALTER TABLE `roles_usuarios`
+  ADD CONSTRAINT `roles_usuarios_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`);
+
+--
+-- Filtros para la tabla `usuarios_puntaje`
+--
+ALTER TABLE `usuarios_puntaje`
+  ADD CONSTRAINT `usuarios_puntaje_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `usuarios_puntaje_ibfk_2` FOREIGN KEY (`action_id`) REFERENCES `acciones` (`id`);
+
+--
+-- Filtros para la tabla `usuario_notificaciones`
+--
+ALTER TABLE `usuario_notificaciones`
+  ADD CONSTRAINT `usuario_notificaciones_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `usuario_notificaciones_ibfk_2` FOREIGN KEY (`notificacion_id`) REFERENCES `notificaciones` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

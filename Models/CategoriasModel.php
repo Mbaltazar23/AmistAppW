@@ -19,7 +19,8 @@ class CategoriasModel extends Mysql {
 
     public function selectCategoria(int $idCategoria) {
         $this->intIdCategoria = $idCategoria;
-        $sql = "SELECT id, nombre, status FROM categorias WHERE id = $this->intIdCategoria";
+        $sql = "SELECT id, nombre,DATE_FORMAT(created_at, '%d/%m/%Y') as fecha, 
+            DATE_FORMAT(created_at, '%H:%i:%s') as hora, status FROM categorias WHERE id = $this->intIdCategoria";
         $request = $this->select($sql);
         return $request;
     }
@@ -30,7 +31,7 @@ class CategoriasModel extends Mysql {
         $sql = "SELECT * FROM categorias WHERE nombre = '{$this->strNombre}' ";
         $request = $this->select_all($sql);
         if (empty($request)) {
-            $query_insert = "INSERT INTO categorias (nombre, status) VALUES (?,1)";
+            $query_insert = "INSERT INTO categorias (nombre) VALUES (?)";
             $arrData = array($this->strNombre);
             $request_insert = $this->insert($query_insert, $arrData);
             $return = $request_insert;

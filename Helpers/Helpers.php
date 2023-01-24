@@ -82,15 +82,16 @@ function suscripcionCli(int $idpersona) {
     return $request;
 }
 
-function uploadImage(array $data, string $name) {
+//metodo que servira para la subida de imagenes
+function uploadImage(array $data, string $name, string $ruta) {
     $url_temp = $data['tmp_name'];
-    $destino = 'Assets/images/uploads/' . $name;
+    $destino = 'Assets/dist/img/' . $ruta . '/' . $name;
     $move = move_uploaded_file($url_temp, $destino);
     return $move;
 }
 
-function deleteFile(string $name) {
-    unlink('Assets/images/uploads/' . $name);
+function deleteFile(string $name, string $ruta) {
+    unlink($destino = 'Assets/dist/img/' . $ruta . '/' . $name);
 }
 
 //Elimina exceso de espacios entre palabras
@@ -216,7 +217,6 @@ function navDashboardAdmin() {
             "Canjeo de Puntos" => array(
                 "icon" => "fas fa-regular fa-award",
                 "submodulos" => array(
-                    "Puntaje" => array("pagina" => "puntaje"),
                     "Acciones" => array("pagina" => "acciones"),
                     "Notificaciones" => array("pagina" => "notificaciones")
                 )
@@ -224,7 +224,7 @@ function navDashboardAdmin() {
             "Educacion" => array(
                 "icon" => "fas fa-solid fa-school",
                 "submodulos" => array(
-                    "Adminstrador Colegio" => array("pagina" => "admin-colegio"),
+                    "Adminstrador(s) Colegio" => array("pagina" => "admincolegio"),
                     "Colegios" => array("pagina" => "colegios")
                 )
             ),

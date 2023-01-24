@@ -28,9 +28,9 @@ headerAdmin($data);
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="profile-user-img img-fluid img-circle"
-                                     src="<?= media(); ?>/dist/img/<?= $data["imgPerfil"]; ?>"
-                                     alt="<?= $data["imgPerfil"]; ?>">
+                                <img class="profile-user-img img-fluid img-circle" 
+                                     src="<?= media(); ?>/dist/img/<?= $_SESSION['userData']["imgPerfil"]; ?>"
+                                     alt="<?= $_SESSION['userData']["imgPerfil"]; ?>"/>
                             </div>
 
                             <h3 class="profile-username text-center"><?= $_SESSION['userData']["nombre"] ?></h3>
@@ -44,7 +44,7 @@ headerAdmin($data);
                     <!-- About Me Box -->
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">About Me</h3>
+                            <h3 class="card-title">Sobre Mi</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -95,47 +95,55 @@ headerAdmin($data);
                                 <div class="active tab-pane" id="settings">
                                     <form class="form-horizontal">
                                         <div class="form-group row">
-                                            <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                                            <label for="inputName" class="col-sm-2 col-form-label">Rut</label>
                                             <div class="col-sm-10">
-                                                <input type="email" class="form-control" id="inputName" placeholder="Name">
+                                                <input type="email" class="form-control" id="txtRut" name="txtRut" placeholder="Rut">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                                            <label for="inputName" class="col-sm-2 col-form-label">Nombres</label>
                                             <div class="col-sm-10">
-                                                <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                                                <input type="email" class="form-control" id="txtNombre" name="txtNombre" placeholder="Nombres..">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
+                                            <label for="inputName2" class="col-sm-2 col-form-label">Email</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="inputName2" placeholder="Name">
+                                                <input type="text" class="form-control" id="txtEmail" name="txtNombre" placeholder="Email..">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
+                                            <label for="txtDireccion" class="col-sm-2 col-form-label">Direccion</label>
                                             <div class="col-sm-10">
-                                                <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
+                                                <textarea class="form-control" id="txtDireccion" name="txtDireccion" placeholder="Direccion..">
+                                                </textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
+                                            <label for="inputSkills" class="col-sm-2 col-form-label">Password</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
+                                                <input type="text" class="form-control" id="txtPassword01" name="txtPassword01" placeholder="Password..">
                                             </div>
                                         </div>
+                                        <div class="form-group row">
+                                            <label for="inputSkills" class="col-sm-2 col-form-label">Repetir</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="txtPassword02" name="txtPassword02" placeholder="Repetir Password..">
+                                            </div>
+                                        </div>
+
                                         <div class="form-group row">
                                             <div class="offset-sm-2 col-sm-10">
                                                 <div class="checkbox">
                                                     <label>
-                                                        <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
+                                                        <input type="checkbox">&nbsp;Yo acepto los terminos y  <a href="">condiciones</a>
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="offset-sm-2 col-sm-10">
-                                                <button type="submit" class="btn btn-danger">Submit</button>
+                                                <button type="submit" class="btn btn-info"><i class="fas fa-pencil-alt"></i>&nbsp;Actualizar</button>
                                             </div>
                                         </div>
                                     </form>

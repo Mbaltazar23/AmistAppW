@@ -27,15 +27,7 @@ class Dashboard extends Controllers {
         $data['page_tag'] = "Dashboard: Perfil -" . TITLE_ADMIN;
         $data['page_title'] = "Dashboard: Perfil -" . TITLE_ADMIN;
 
-        $data['page_name'] = "perfil";
-        $data["imgPerfil"] = "";
-        if ($_SESSION["rol"] == ROLADMIN) {
-            $data["imgPerfil"] = "avatar5.png";
-        } else if ($_SESSION["rol"] == ROLPROFE) {
-            $data["imgPerfil"] = "avatar5.png";
-        } else {
-            $data["imgPerfil"] = "avatarAlum.jpg";
-        }
+        $data['page_name'] = "perfil";       
         $data['rol-personal'] = $_SESSION['rol'];
         $data['page_functions_js'] = "functions_perfil.js";
         $this->views->getView($this, "profile", $data);

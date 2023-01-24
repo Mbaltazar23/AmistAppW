@@ -24,6 +24,7 @@
         <link rel="stylesheet" href="<?= media(); ?>/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
         <link rel="stylesheet" href="<?= media(); ?>/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
         <link rel="stylesheet" href="<?= media(); ?>/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+        <link rel="stylesheet" href="<?= media(); ?>/dist/css/styles.css" type="text/css"/>
         <!-- Theme style -->
         <link rel="stylesheet" href="<?= media(); ?>/dist/css/adminlte.min.css">
         <!-- overlayScrollbars -->

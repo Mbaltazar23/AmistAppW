@@ -1,7 +1,7 @@
 <!-- /.content-wrapper -->
 <footer class="main-footer">
-    <strong>Copyright &copy; 2023 <a href="<?= base_url() ?>">AdminLTE.io</a>.</strong>
-    All rights reserved.
+    <strong>Copyright &copy; 2023 <a href="<?= base_url() ?>"><?= NOMBRE_WEB ?></a>.</strong>
+       Todos los derechos reservados.
 </footer>
 
 <!-- Control Sidebar -->
@@ -35,13 +35,6 @@
 <script src="<?= media(); ?>/plugins/sweetalert2/swettalert.min.js" type="text/javascript"></script>
 <script>
     $.widget.bridge('uibutton', $.ui.button)
-</script>
-<script>
-    $(function () {
-        $("#example1").DataTable({
-            "responsive": true
-        });
-    });
 </script>
 <!-- Bootstrap 4 -->
 <script src="<?= media() ?>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>

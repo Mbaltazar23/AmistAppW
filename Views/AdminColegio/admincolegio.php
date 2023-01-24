@@ -1,6 +1,6 @@
 <?php
 headerAdmin($data);
-getModal('modalProductos', $data);
+getModal('modalAdminColegio', $data);
 ?>
 
 <div class="content-wrapper">
@@ -23,7 +23,7 @@ getModal('modalProductos', $data);
 
     <!-- Main content -->
     <section class="content">
-        <div class="container-fluid">
+        <div class="container-lg">
             <div class="row">
                 <div class="col-12">
                     <!-- Default box -->
@@ -31,33 +31,23 @@ getModal('modalProductos', $data);
                         <div class="card-header">
                             <h3 class="card-title"><strong><?= $data['page_title'] ?></strong></h3>
                             <div class="card-tools">
-                                <input type="button" value="Nuevo Producto" onclick="openModal();" class="btn btn-success float-right"/>
+                                <input type="button"  value="Nuevo Admin" onclick="openModal();" class="btn btn-success float-right"/>
                             </div>
                         </div>
                         <div class="card-body">
-                            <table id="tableProductos" class="table table-responsive-lg" style="width: 100%;">
+                            <table id="tableAdmins" class="table table-hover table-responsive-lg" style="width: 100%;">
                                 <thead>
                                     <tr>
+                                        <th>Dni</th>
                                         <th>Nombre</th>
-                                        <th>Precio</th>
-                                        <th>Stock</th>
-                                        <th>Categoria</th>
+                                        <th>Correo</th>
+                                        <th>Telefono</th>
                                         <th>Status</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-<!--                                    <tr>
-                                        <td>
-                                            <img src="<?= media(); ?>/dist/img/default-150x150.png" alt="Product 1" class="img-circle img-size-32 mr-2">
-                                            Some Product
-                                        </td>
-                                        <td>dgfdh</td>
-                                        <td>dgfdh</td>
-                                        <td>dgfdh</td>
-                                        <td>dgfdh</td>
-                                        <td>dgfdh</td>
-                                    </tr>-->
+
                                 </tbody>
                             </table>
                         </div>
@@ -73,6 +63,10 @@ getModal('modalProductos', $data);
     <!-- /.content -->
 </div>
 
-<?php
-footerAdmin($data)
-?>
+
+
+
+
+
+<?php footerAdmin($data); ?>
+

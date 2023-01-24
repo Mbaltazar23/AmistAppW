@@ -22,27 +22,26 @@ class Categorias extends Controllers {
 
     public function setCategoria() {
         if ($_POST) {
-            if (empty($_POST['txtNombre']) || empty($_POST['txtDescripcion'])) {
+            if (empty($_POST['txtNombre'])) {
                 $arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
             } else {
                 $intIdcategoria = intval($_POST['idCategoria']);
                 $strCategoria = ucwords(strClean($_POST['txtNombre']));
-                $intStatus = 1;
                 $request_categoria = "";
                 if ($intIdcategoria == 0) {
                     //Crear
-                    $request_categoria = $this->model->inserCategoria($strCategoria, $strDescipcion, $intStatus, $fecha);
+                    $request_categoria = $this->model->insertCategoria($strCategoria);
                     $option = 1;
                 } else {
                     //Actualizar
-                    $request_categoria = $this->model->updateCategoria($intIdcategoria, $strCategoria, $strDescipcion, $intStatus, $fecha);
+                    $request_categoria = $this->model->updateCategoria($intIdcategoria, $strCategoria);
                     $option = 2;
                 }
                 if ($request_categoria > 0) {
                     if ($option == 1) {
-                        $arrResponse = array('status' => true, 'msg' => 'Datos guardados correctamente.');
+                        $arrResponse = array('status' => true, 'msg' => 'Categoria registrada Exitosamente !!');
                     } else {
-                        $arrResponse = array('status' => true, 'msg' => 'Datos Actualizados correctamente.');
+                        $arrResponse = array('status' => true, 'msg' => 'Categoria actualizada Exitosamente !!');
                     }
                 } else if ($request_categoria == 'exist') {
                     $arrResponse = array('status' => false, 'msg' => '¡Atención! La categoría ya existe.');
@@ -60,17 +59,17 @@ class Categorias extends Controllers {
             $btnView = '';
             $btnEdit = '';
             $btnDelete = '';
-
-            if ($arrData[$i]['estadoCategoria'] == 1) {
-                $arrData[$i]['estadoCategoria'] = '<span class="badge badge-success">Activo</span>';
-                $btnView = '<button class="btn btn-info btn-sm" onClick="fntViewInfo(' . $arrData[$i]['idcategoria'] . ')" title="Ver categoría"><i class="far fa-eye"></i></button>';
-                $btnEdit = '<button class="btn btn-primary  btn-sm" onClick="fntEditInfo(this,' . $arrData[$i]['idcategoria'] . ')" title="Editar categoría"><i class="fas fa-pencil-alt"></i></button>';
-                $btnDelete = '<button class="btn btn-danger btn-sm" onClick="fntDelInfo(' . $arrData[$i]['idcategoria'] . ')" title="Eliminar categoría"><i class="far fa-trash-alt"></i></button>';
+            $arrData[$i]["nro"] = ($i + 1);
+            if ($arrData[$i]['status'] == 1) {
+                $arrData[$i]['status'] = '<span class="badge badge-success">Activo</span>';
+                $btnView = '<button class="btn btn-info btn-sm" onClick="fntViewInfo(' . ($i + 1) . ',' . $arrData[$i]['id'] . ')" title="Ver categoría"><i class="far fa-eye"></i></button>';
+                $btnEdit = '<button class="btn btn-primary  btn-sm" onClick="fntEditInfo(this,' . $arrData[$i]['id'] . ')" title="Editar categoría"><i class="fas fa-pencil-alt"></i></button>';
+                $btnDelete = '<button class="btn btn-danger btn-sm" onClick="fntDelInfo(' . $arrData[$i]['id'] . ')" title="Eliminar categoría"><i class="far fa-trash-alt"></i></button>';
             } else {
-                $arrData[$i]['estadoCategoria'] = '<span class="badge badge-danger">Inactivo</span>';
-                $btnView = '<button class="btn btn-secondary btn-sm" onClick="fntViewInfo(' . $arrData[$i]['idcategoria'] . ')" title="Ver categoría" disabled><i class="far fa-eye"></i></button>';
-                $btnEdit = '<button class="btn btn-secondary  btn-sm" onClick="fntEditInfo(this,' . $arrData[$i]['idcategoria'] . ')" title="Editar categoría" disabled><i class="fas fa-pencil-alt"></i></button>';
-                $btnDelete = '<button class="btn btn-dark btn-sm" onClick="fntActivateInfo(' . $arrData[$i]['idcategoria'] . ')" title="Activar categoría"><i class="fas fa-toggle-on"></i></button>';
+                $arrData[$i]['status'] = '<span class="badge badge-danger">Inactivo</span>';
+                $btnView = '<button class="btn btn-secondary btn-sm" onClick="fntViewInfo(' . ($i + 1) . ',' . $arrData[$i]['id'] . ')" title="Ver categoría" disabled><i class="far fa-eye"></i></button>';
+                $btnEdit = '<button class="btn btn-secondary  btn-sm" onClick="fntEditInfo(this,' . $arrData[$i]['id'] . ')" title="Editar categoría" disabled><i class="fas fa-pencil-alt"></i></button>';
+                $btnDelete = '<button class="btn btn-dark btn-sm" onClick="fntActivateInfo(' . $arrData[$i]['id'] . ')" title="Activar categoría"><i class="fas fa-toggle-on"></i></button>';
             }
 
             $arrData[$i]['options'] = '<div class="text-center">' . $btnView . '  ' . $btnEdit . '  ' . $btnDelete . '</div>';
@@ -114,12 +113,12 @@ class Categorias extends Controllers {
 
     public function getSelectCategorias() {
         $htmlOptions = "";
-        $arrData = $this->model->selectCategoriasPro();
+        $arrData = $this->model->selectCategorias(1);
         echo '<option value="0">Seleccione una categoria</option>';
         if (count($arrData) > 0) {
             for ($i = 0; $i < count($arrData); $i++) {
-                if ($arrData[$i]['estadoCategoria'] == 1) {
-                    $htmlOptions .= '<option value="' . $arrData[$i]['idcategoria'] . '">' . $arrData[$i]['nombreCategoria'] . '</option>';
+                if ($arrData[$i]['status'] == 1) {
+                    $htmlOptions .= '<option value="' . $arrData[$i]['id'] . '">' . $arrData[$i]['nombre'] . '</option>';
                 }
             }
         }

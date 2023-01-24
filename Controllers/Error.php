@@ -8,8 +8,8 @@ class Errors extends Controllers {
     }
 
     public function notFound() {
-        $data['page_tag'] = NOMBRE_EMPESA . "- Pagina no Encontrada";
-        $data['page_title'] = NOMBRE_EMPESA;
+        $data['page_tag'] = NOMBRE_WEB . "- Pagina no Encontrada";
+        $data['page_title'] = NOMBRE_WEB;
         $data['page_name'] = "error";
         $this->views->getView($this, "error", $data);
     }

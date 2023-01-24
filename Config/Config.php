@@ -27,7 +27,7 @@ const METHODENCRIPT = "AES-128-ECB";
 
 
 const ROLADMIN = "Administrador";
-const ROLADMINCOLE = "Admin.Colegio";
+const ROLADMINCOLE = "Adminitrador de Colegio";
 const ROLALU = "Alumno";
 const ROLPROFE = "Profesor";
 ?>
