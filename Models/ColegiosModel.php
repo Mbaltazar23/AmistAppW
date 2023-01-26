@@ -20,7 +20,7 @@ class ColegiosModel extends Mysql {
     public function selectColegios($option = NULL) {
         $this->intStatus = $option != NULL ? "WHERE c.status != 0" : "";
         $sql = "SELECT c.id, c.nombre, DATE_FORMAT(c.created_at, '%d/%m/%Y') as fecha, 
-            DATE_FORMAT(c.created_at, '%H:%i:%s') as hora,c.rut, c.direccion, c.telefono, c.status, u.email, u.dni 
+            DATE_FORMAT(c.created_at, '%H:%i:%s') as hora,c.rut, c.direccion, c.telefono, c.status
             FROM colegios c $this->intStatus";
         $request = $this->select_all($sql);
         return $request;
@@ -28,7 +28,7 @@ class ColegiosModel extends Mysql {
 
     public function selectColegio(int $idColegio) {
         $this->intIdColegio = $idColegio;
-        $sql = "SELECT c.id, c.nombre, c.rut,DATE_FORMAT(c.created_at, '%d/%m/%Y') as fecha, 
+        $sql = "SELECT c.id, c.nombre,c.direccion, c.telefono, c.status, c.rut, DATE_FORMAT(c.created_at, '%d/%m/%Y') as fecha, 
             DATE_FORMAT(c.created_at, '%H:%i:%s') as hora FROM colegios c WHERE c.id = $this->intIdColegio";
         $request = $this->select($sql);
         return $request;
@@ -65,7 +65,7 @@ class ColegiosModel extends Mysql {
         $sql = "SELECT * FROM colegios WHERE id != $this->intIdcolegio AND nombre = '$this->strNombre'";
         $request = $this->select_all($sql);
         if (empty($request)) {
-            $query_update = "UPDATE colegios SET nombre = ?, rut = ?, direccion = ?, telefono = ? WHERE id = $this->intIdColegio";
+            $query_update = "UPDATE colegios SET nombre = ?, rut = ?, direccion = ?, telefono = ? WHERE id = $this->intIdcolegio";
             $arrData = array($this->strNombre,
                 $this->strRut,
                 $this->strDireccion,

@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (objData.status)
                     {
                         tableAdmins.api().ajax.reload();
-                        $('#modalFormCategorias').modal("hide");
+                        $('#modalFormAdmins').modal("hide");
                         formAdmin.reset();
                         swal("Exito !!", objData.msg, "success");
                     } else {
@@ -68,6 +68,40 @@ document.addEventListener('DOMContentLoaded', function () {
             };
         }
     };
+
+    let formColegioA = document.querySelector("#formColegioA");
+    formColegioA.onsubmit = function (e) {
+        e.preventDefault();
+        let listColegios = document.querySelector("#listColegios").value;
+        if (listColegios == '') {
+         swal("Atención", "Debe ingresar datos para crear al Admin", "error");
+            return false;
+        }else {
+            let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+            let ajaxUrl = base_url + '/AdminColegio/setDetailColegio';
+            let formData = new FormData(formColegioA);
+            request.open("POST", ajaxUrl, true);
+            request.send(formData);
+            request.onreadystatechange = function () {
+                if (request.readyState == 4 && request.status == 200) {
+
+                    let objData = JSON.parse(request.responseText);
+                    if (objData.status)
+                    {
+                        tableAdmins.api().ajax.reload();
+                        $('#modalFormColegiosAd').modal("hide");
+                        formColegioA.reset();
+                        swal("Exito !!", objData.msg, "success");
+                    } else {
+                        swal("Error", objData.msg, "error");
+                    }
+                }
+                return false;
+            };
+        }
+    };
+
+    fntColegios();
 }, false);
 
 function fntViewInfo(idAdmin) {
@@ -84,8 +118,6 @@ function fntViewInfo(idAdmin) {
                         '<span class="badge badge-success">Activo</span>' :
                         '<span class="badge badge-dark">Vinculado</span>';
                 document.querySelector("#celRut").innerHTML = objData.data.dni;
-                document.querySelector("#celRut").classList.add("filled-cell");
-
                 document.querySelector("#celNombre").innerHTML = objData.data.nombre;
                 document.querySelector("#celEmail").innerHTML = objData.data.email;
                 document.querySelector("#celTelefono").innerHTML = objData.data.telefono;
@@ -112,7 +144,23 @@ function fntEditInfo(element, idAdmin) {
     request.open("GET", ajaxUrl, true);
     request.send();
     request.onreadystatechange = function () {
+        if (request.readyState == 4 && request.status == 200) {
+            let objData = JSON.parse(request.responseText);
+            if (objData.status)
+            {
+                document.querySelector("#idAdmin").value = objData.data.id;
+                document.querySelector("#txtDni").value = objData.data.dni;
+                document.querySelector("#txtNombre").value = objData.data.nombre.toString().toLowerCase();
+                document.querySelector("#txtEmail").value = objData.data.email.toString().toLowerCase();
+                document.querySelector("#txtTelefono").value = objData.data.telefono;
+                document.querySelector("#txtDireccion").value = objData.data.direccion.toString().toLowerCase();
 
+                $('#modalFormAdmins').modal('show');
+
+            } else {
+                swal("Error", objData.msg, "error");
+            }
+        }
     };
 }
 
@@ -185,7 +233,101 @@ function openModal() {
     document.querySelector('#idAdmin').value = "";
     document.querySelector('#btnActionForm').classList.replace("btn-info", "btn-primary");
     document.querySelector('#btnText').innerHTML = "Guardar";
-    document.querySelector('#titleModal').innerHTML = "Nueva Adminitrador de Colegio";
+    document.querySelector('#titleModal').innerHTML = "Nuevo Adminitrador de Colegio";
     document.querySelector("#formAdmin").reset();
     $('#modalFormAdmins').modal('show');
+}
+
+
+/*Funciones para el añadir/actualizar colegio por parte del Admin*/
+
+function fntSchoolA(idAdmin) {
+    document.querySelector('#titleModalA').innerHTML = "Agregar Colegio al Admin";
+    document.querySelector('#btnActionFormA').classList.replace("btn-info", "btn-primary");
+    document.querySelector('#btnTextA').innerHTML = "Guardar";
+    let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+    let ajaxUrl = base_url + '/AdminColegio/getAdminColegio/' + idAdmin;
+    request.open("GET", ajaxUrl, true);
+    request.send();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4 && request.status == 200) {
+            let objData = JSON.parse(request.responseText);
+            if (objData.status)
+            {
+                document.querySelector("#idAdminC").value = objData.data.id;
+                document.querySelector("#idVinCol").value = "";
+                document.querySelector("#txtDniA").value = objData.data.dni;
+                document.querySelector("#txtNombreA").value = objData.data.nombre;
+                document.querySelector("#listColegios").value = "0";
+                $("#modalFormColegiosAd").modal('show');
+            }
+        }
+    };
+}
+function fntSchoolU(idAdmin) {
+    document.querySelector('#titleModalA').innerHTML = "Actualizar Colegio al Admin";
+    document.querySelector('#btnActionFormA').classList.replace("btn-primary", "btn-info");
+    document.querySelector('#btnTextA').innerHTML = "Actualizar";
+    let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+    let ajaxUrl = base_url + '/AdminColegio/getAdminColegio/' + idAdmin;
+    request.open("GET", ajaxUrl, true);
+    request.send();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4 && request.status == 200) {
+            let objData = JSON.parse(request.responseText);
+            if (objData.status)
+            {
+                document.querySelector("#idAdminC").value = objData.data.id;
+                document.querySelector("#idVinCol").value = objData.data.school.idVin;
+                document.querySelector("#txtDniA").value = objData.data.dni;
+                document.querySelector("#txtNombreA").value = objData.data.nombre;
+                document.querySelector("#listColegios").value = objData.data.school.id;
+                $("#modalFormColegiosAd").modal('show');
+            }
+        }
+    };
+}
+
+function fntDelSchool(idadmin) {
+    swal({
+        title: "Remover Colegio",
+        text: "¿Realmente quiere quitar este colegio?",
+        icon: "warning",
+        dangerMode: true,
+        buttons: true
+    }).then((isClosed) => {
+        if (isClosed) {
+            let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+            let ajaxUrl = base_url + '/AdminColegio/removeSchoolAdmin';
+            let strData = "idAdmin=" + idadmin;
+            request.open("POST", ajaxUrl, true);
+            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            request.send(strData);
+            request.onreadystatechange = function () {
+                if (request.readyState == 4 && request.status == 200) {
+                    let objData = JSON.parse(request.responseText);
+                    if (objData.status)
+                    {
+                        swal("Exito !!", objData.msg, "success");
+                        tableAdmins.api().ajax.reload();
+                    } else {
+                        swal("Atención!", objData.msg, "error");
+                    }
+                }
+            };
+        }
+    });
+
+}
+
+function fntColegios() {
+    if (document.querySelector('#listColegios')) {
+        $.ajax({
+            type: "POST",
+            url: base_url + '/Colegios/getSelectColegios',
+            success: function (data) {
+                $('.selectColegios select').html(data).fadeIn();
+            }
+        });
+    }
 }

@@ -40,47 +40,6 @@ headerAdmin($data);
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
-
-                    <!-- About Me Box -->
-                    <div class="card card-primary">
-                        <div class="card-header">
-                            <h3 class="card-title">Sobre Mi</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <strong><i class="fas fa-book mr-1"></i> Education</strong>
-
-                            <p class="text-muted">
-                                B.S. in Computer Science from the University of Tennessee at Knoxville
-                            </p>
-
-                            <hr>
-
-                            <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
-
-                            <p class="text-muted">Malibu, California</p>
-
-                            <hr>
-
-                            <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
-
-                            <p class="text-muted">
-                                <span class="tag tag-danger">UI Design</span>
-                                <span class="tag tag-success">Coding</span>
-                                <span class="tag tag-info">Javascript</span>
-                                <span class="tag tag-warning">PHP</span>
-                                <span class="tag tag-primary">Node.js</span>
-                            </p>
-
-                            <hr>
-
-                            <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
-
-                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
                 </div>
                 <!-- /.col -->
                 <div class="col-md-9">
@@ -97,19 +56,19 @@ headerAdmin($data);
                                         <div class="form-group row">
                                             <label for="inputName" class="col-sm-2 col-form-label">Rut</label>
                                             <div class="col-sm-10">
-                                                <input type="email" class="form-control" id="txtRut" name="txtRut" placeholder="Rut">
+                                                <input type="text" class="form-control" id="txtRut" name="txtRut" placeholder="Rut">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputName" class="col-sm-2 col-form-label">Nombres</label>
                                             <div class="col-sm-10">
-                                                <input type="email" class="form-control" id="txtNombre" name="txtNombre" placeholder="Nombres..">
+                                                <input type="text" class="form-control" id="txtNombre" name="txtNombre" placeholder="Nombres..">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputName2" class="col-sm-2 col-form-label">Email</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="txtEmail" name="txtNombre" placeholder="Email..">
+                                                <input type="email" class="form-control" id="txtEmail" name="txtEmail" placeholder="Email..">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -136,7 +95,7 @@ headerAdmin($data);
                                             <div class="offset-sm-2 col-sm-10">
                                                 <div class="checkbox">
                                                     <label>
-                                                        <input type="checkbox">&nbsp;Yo acepto los terminos y  <a href="">condiciones</a>
+                                                        <input type="checkbox" required>&nbsp;Yo acepto los terminos y  <a href="">condiciones</a>
                                                     </label>
                                                 </div>
                                             </div>
