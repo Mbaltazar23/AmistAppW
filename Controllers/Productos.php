@@ -12,7 +12,7 @@ class Productos extends Controllers {
     }
 
     public function productos() {
-        $data['page_tag'] = TITLE_ADMIN . "- Productos";
+        $data['page_tag'] = NOMBRE_WEB . "- Productos";
         $data['page_title'] = "Productos";
         $data['page_name'] = "productos";
         $data['rol-personal'] = $_SESSION['rol'];

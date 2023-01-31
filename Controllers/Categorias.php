@@ -12,7 +12,7 @@ class Categorias extends Controllers {
     }
 
     public function Categorias() {
-        $data['page_tag'] = TITLE_ADMIN . "- Categorias";
+        $data['page_tag'] = NOMBRE_WEB . "- Categorias";
         $data['page_title'] = "Categorias";
         $data['page_name'] = "categorias";
         $data['rol-personal'] = $_SESSION['rol'];

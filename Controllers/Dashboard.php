@@ -11,9 +11,9 @@ class Dashboard extends Controllers {
             header('Location: ' . base_url() . '/home');
             die();
         }
-        $data['page_tag'] = "Dashboard -" . TITLE_ADMIN;
-        $data['page_title'] = "Dashboard -" . TITLE_ADMIN;
-        $data['page_name'] = "dashboard";        
+        $data['page_tag'] = NOMBRE_WEB . " - Dashboard";
+        $data['page_title'] = NOMBRE_WEB . "- dashboard";
+        $data['page_name'] = "dashboard";
         $data['rol-personal'] = $_SESSION['rol'];
         $data['page_functions_js'] = "functions_dashboard.js";
         $this->views->getView($this, "dashboard", $data);
@@ -24,10 +24,10 @@ class Dashboard extends Controllers {
             header('Location: ' . base_url() . '/home');
             die();
         }
-        $data['page_tag'] = "Dashboard: Perfil -" . TITLE_ADMIN;
-        $data['page_title'] = "Dashboard: Perfil -" . TITLE_ADMIN;
+        $data['page_tag'] = NOMBRE_WEB . "- Perfil";
+        $data['page_title'] = NOMBRE_WEB . "- perfil";
 
-        $data['page_name'] = "perfil";       
+        $data['page_name'] = "perfil";
         $data['rol-personal'] = $_SESSION['rol'];
         $data['page_functions_js'] = "functions_perfil.js";
         $this->views->getView($this, "profile", $data);

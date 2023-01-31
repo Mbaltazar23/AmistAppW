@@ -1,13 +1,14 @@
 <?php
 
-/**
- *
- * @author mario
- */
+
 class NotificacionesModel extends Mysql {
 
     private $idNotificacion;
+    private $idPregunta;
     private $mensajeNotificacion;
+    private $preguntaNotificacion;
+    private $respuestaNotificacion;
+    private $consejoNotificacion;
     private $tipoNotificacion;
     private $puntosNotificacion;
     private $statusNotificacion;
@@ -19,16 +20,18 @@ class NotificacionesModel extends Mysql {
     public function selectNotificaciones($opcion = NULL) {
         $validateStatus = "";
         if ($opcion != NULL) {
-            $validateStatus = "WHERE statusNotificacion != 0";
+            $validateStatus = "WHERE status != 0";
         }
-        $sql = "SELECT * FROM notificaciones $validateStatus";
+        $sql = "SELECT id, mensaje, tipo, DATE_FORMAT(created_at, '%d/%m/%Y') as fecha, 
+            DATE_FORMAT(created_at, '%H:%i:%s') as hora,status FROM notificaciones $validateStatus";
         $request = $this->select_all($sql);
         return $request;
     }
 
     public function selectNotificacion(int $idNotificacion) {
         $this->idNotificacion = $idNotificacion;
-        $sql = "SELECT * FROM notificaciones WHERE id = $this->idNotificacion";
+        $sql = "SELECT id, mensaje, tipo, DATE_FORMAT(created_at, '%d/%m/%Y') as fecha, 
+            DATE_FORMAT(created_at, '%H:%i:%s') as hora, status FROM notificaciones WHERE id = $this->idNotificacion";
         $request = $this->select($sql);
         return $request;
     }
@@ -41,7 +44,7 @@ class NotificacionesModel extends Mysql {
         $sql = "SELECT * FROM notificaciones WHERE mensaje = '$this->mensajeNotificacion'";
         $request = $this->select_all($sql);
         if (empty($request)) {
-            $query_insert = "INSERT INTO notificaciones (mensaje,tipo, puntos) VALUES (?,?,?)";
+            $query_insert = "INSERT INTO notificaciones (mensaje, tipo, puntos) VALUES (?,?,?)";
             $arrData = array($this->mensajeNotificacion,
                 $this->tipoNotificacion,
                 $this->puntosNotificacion);
@@ -53,31 +56,45 @@ class NotificacionesModel extends Mysql {
         return $return;
     }
 
-    public function updateNotificacion(int $idNotificacion, string $tipoNotificacion, string $mensajeNotificacion, int $puntosNotificacion) {
+    public function updateNotificacion(int $idNotificacion, string $tipoNotificacion, string $mensajeNotificacion) {
         $this->idNotificacion = $idNotificacion;
         $this->mensajeNotificacion = $mensajeNotificacion;
-        $this->puntosNotificacion = $puntosNotificacion;
         $this->tipoNotificacion = $tipoNotificacion;
         $sql = "SELECT * FROM notificaciones WHERE mensaje = '$this->mensajeNotificacion' AND id != $this->idNotificacion";
         $request = $this->select_all($sql);
         if (empty($request)) {
-            $sqlU = "UPDATE notificaciones SET mensaje= ?,tipo = ?, puntos= ? WHERE id = $this->idNotificacion";
+            $sqlU = "UPDATE notificaciones SET mensaje = ?, tipo = ? WHERE id = $this->idNotificacion";
             $arrData = array($this->mensajeNotificacion,
-                $this->tipoNotificacion,
-                $this->puntosNotificacion);
+                $this->tipoNotificacion);
             $request = $this->update($sqlU, $arrData);
         } else {
             $request = "exist";
         }
         return $request;
     }
-    
+
     public function insertQuestion(int $idNotificacion, string $pregunta) {
-        
+        $this->idNotificacion = $idNotificacion;
+        $this->preguntaNotificacion = $pregunta;
+        $sql = "INSERT INTO preguntas(pregunta, notificacion_id) VALUES (?,?)";
+        $arrData = array($this->preguntaNotificacion,
+            $this->idNotificacion);
+        $request_insert = $this->insert($sql, $arrData);
+        $return = $request_insert;
+        return $return;
     }
-    
+
     public function insertAnswer(int $idQuestion, string $respuesta, string $consejo) {
-        
+        $this->idPregunta = $idQuestion;
+        $this->respuestaNotificacion = $respuesta;
+        $this->consejoNotificacion = $consejo;
+        $sql = "INSERT INTO respuestas(pregunta_id,respuesta,consejo) VALUES (?,?,?)";
+        $arrData = array($this->idPregunta,
+            $this->respuestaNotificacion,
+            $this->consejoNotificacion);
+        $request_insert = $this->insert($sql, $arrData);
+        $return = $request_insert;
+        return $return;
     }
 
     public function updateStatusNotificaciones(int $id, int $status) {

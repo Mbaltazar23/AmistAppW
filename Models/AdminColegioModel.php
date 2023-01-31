@@ -120,8 +120,8 @@ class AdminColegioModel extends Mysql {
                 $this->intIdColegio);
             $return = $this->insert($query_insert, $arrData);
             $sqlUpdate = "UPDATE usuarios SET status = ? WHERE id = $this->intIdUsuario";
-            $arrData = array(1);
-            $this->update($sqlUpdate, $arrData);
+            $arrD = array(2);
+            $this->update($sqlUpdate, $arrD);
         } else {
             $return = "exist";
         }

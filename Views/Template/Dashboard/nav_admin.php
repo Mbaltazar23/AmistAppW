@@ -1,7 +1,7 @@
 <div class="wrapper">
     <!-- Preloader -->
     <div class="preloader flex-column justify-content-center align-items-center">
-        <img class="animation__shake" src="<?= media(); ?>/dist/img/AmistAppIcon.png" alt="AmistAppLogo" height="90" width="90"/>
+        <img class="animation__shake" src="<?= media(); ?>/img/AmistAppIcon.png" alt="AmistAppLogo" height="90" width="90"/>
     </div>
     <!--Navbar responsive-->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -20,18 +20,18 @@
                     <span class="badge badge-warning navbar-badge">15</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <?php getModal('modalNotificaciones', $data) ?>
+                    <?php getModal('modalNavNotificaciones', $data) ?>
                 </div>
             </li>
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                    <img src="<?= media(); ?>/dist/img/<?= $_SESSION['userData']["imgPerfil"] ?>" class="user-image img-circle elevation-2" alt="User Image">
+                    <img src="<?= media(); ?>/img/<?= $_SESSION['userData']["imgPerfil"] ?>" class="user-image img-circle elevation-2" alt="User Image">
                     <span class="d-none d-md-inline"><?= $_SESSION['userData']["nombre"] ?></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <!-- User image -->
                     <li class="user-header bg-primary">
-                        <img src="<?= media(); ?>/dist/img/<?= $_SESSION['userData']["imgPerfil"] ?>" class="img-circle elevation-2" alt="User Image">
+                        <img src="<?= media(); ?>/img/<?= $_SESSION['userData']["imgPerfil"] ?>" class="img-circle elevation-2" alt="User Image">
                         <p>
                             <?= $_SESSION['userData']["nombre"] ?> - <?= $_SESSION['userData']["nombreRol"] ?>
                             <small>Registrado desde <?= darFormatoFecha($_SESSION["userData"]["created_at"]) ?></small>
@@ -53,7 +53,7 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <a href="<?= base_url() ?>/dashboard" class="brand-link">
-            <img src="<?= media(); ?>/dist/img/AmistAppIcon.png"  alt="AmistAppLogo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <img src="<?= media(); ?>/img/AmistAppIcon.png"  alt="AmistAppLogo" class="brand-image img-circle elevation-3" style="opacity: .8">
             <span class="brand-text font-weight-light">AmistApp</span>
         </a>
 
@@ -62,7 +62,7 @@
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="<?= media(); ?>/dist/img/<?= $_SESSION['userData']["imgPerfil"]; ?>" class="img-circle elevation-2" alt="<?= $data["imgPerfil"] ?>">
+                    <img src="<?= media(); ?>/img/<?= $_SESSION['userData']["imgPerfil"]; ?>" class="img-circle elevation-2" alt="<?= $data["imgPerfil"] ?>">
                 </div>
                 <div class="info">
                     <a href="<?= base_url(); ?>/dashboard/profile" class="d-block"><?= $_SESSION['userData']["nombre"] ?></a>
@@ -76,7 +76,7 @@
                         <a href="<?= base_url() ?>/dashboard" class="nav-link">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>
-                                Dashboard
+                                <?= TITLE_ADMIN ?>
                             </p>
                         </a>
                     </li>

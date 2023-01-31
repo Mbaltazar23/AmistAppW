@@ -21,7 +21,7 @@ class AdminColegio extends Controllers {
     }
 
     public function admincolegio() {
-        $data['page_tag'] = TITLE_ADMIN . "- Admins Colegio";
+        $data['page_tag'] = NOMBRE_WEB . "- Admins Colegio";
         $data['page_title'] = "Administrador(s)/Colegios";
         $data['page_name'] = "administrador(s) de colegios";
         $data['rol-personal'] = $_SESSION['rol'];
