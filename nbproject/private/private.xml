@@ -5,7 +5,6 @@
         <group>
             <file>file:/C:/xampp/htdocs/AmistAppWeb/Views/Notificaciones/notificaciones.php</file>
             <file>file:/C:/xampp/htdocs/AmistAppWeb/Views/Template/Modals/modalNotificaciones.php</file>
-            <file>file:/C:/xampp/htdocs/AmistAppWeb/Models/CategoriasModel.php</file>
             <file>file:/C:/xampp/htdocs/AmistAppWeb/Models/NotificacionesModel.php</file>
             <file>file:/C:/xampp/htdocs/AmistAppWeb/Assets/js/actions/functions_notificaciones.js</file>
             <file>file:/C:/xampp/htdocs/AmistAppWeb/Assets/js/actions/functions_categorias.js</file>

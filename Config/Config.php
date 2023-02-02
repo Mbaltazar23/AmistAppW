@@ -30,4 +30,6 @@ const ROLADMIN = "Administrador";
 const ROLADMINCOLE = "Adminitrador de Colegio";
 const ROLALU = "Alumno";
 const ROLPROFE = "Profesor";
+const TIPONOTQ = "Pregunta";
+const TIPONOTV = "Video/Mensaje";
 ?>

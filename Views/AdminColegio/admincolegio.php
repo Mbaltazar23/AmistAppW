@@ -13,7 +13,7 @@ getModal('modalAdminColegio', $data);
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="<?= base_url(); ?>">Home</a></li>
+                        <li class="breadcrumb-item"><a href="<?= base_url(); ?>">Inicio</a></li>
                         <li class="breadcrumb-item active"><?= $data['page_title'] ?></li>
                     </ol>
                 </div>
@@ -28,10 +28,17 @@ getModal('modalAdminColegio', $data);
                 <div class="col-12">
                     <!-- Default box -->
                     <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title"><strong><?= $data['page_title'] ?></strong></h3>
-                            <div class="card-tools">
-                                <input type="button"  value="Nuevo Admin" onclick="openModal();" class="btn btn-success float-right"/>
+                       <div class="card-header">
+                            <div class="input-group mb-15">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                                        <?= $data['page_title'] ?>
+                                    </button>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a class="dropdown-item" onclick="openModal();">Nuevo</a>
+                                        <a class="dropdown-item" >Generar Reporte</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body">

@@ -28,9 +28,16 @@ getModal('modalNotificaciones', $data);
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><strong><?= $data['page_title'] ?></strong></h3>
-                            <div class="card-tools">
-                                <input type="button"  value="Nueva Notificacion" onclick="openModal();" class="btn btn-success float-right"/>
+                            <div class="input-group mb-15">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                                        <?= $data['page_title'] ?>
+                                    </button>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a class="dropdown-item" onclick="openModal();">Nuevo</a>
+                                        <a class="dropdown-item" >Generar Reporte</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body">
@@ -38,6 +45,7 @@ getModal('modalNotificaciones', $data);
                                 <thead>
                                     <tr>
                                         <th>Nro</th>
+                                        <th>Nombre</th>
                                         <th>Tipo</th>
                                         <th>Fecha</th>
                                         <th>Status</th>

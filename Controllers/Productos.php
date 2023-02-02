@@ -37,7 +37,7 @@ class Productos extends Controllers {
                 $btnEdit = '<button class="btn btn-secondary  btn-sm" onClick="fntEditInfo(this,' . $arrData[$i]['id'] . ')" title="Editar producto" disabled><i class="fas fa-pencil-alt"></i></button>';
                 $btnDelete = '<button class="btn btn-dark btn-sm" onClick="fntActiveInfo(' . $arrData[$i]['id'] . ')" title="Activar producto"><i class="fas fa-toggle-on"></i></button>';
             }
-            $arrData[$i]["nombreP"] = "<img src='" . media() . "/dist/img/products/" . $arrData[$i]["imagen"] . "'alt='" . $arrData[$i]["nombre"] . "' class='img-circle img-size-32 mr-2'>" . $arrData[$i]["nombre"];
+            $arrData[$i]["nombreP"] = "<img src='" . media() . "/img/products/" . $arrData[$i]["imagen"] . "'alt='" . $arrData[$i]["nombre"] . "' class='img-circle img-size-32 mr-2'>" . $arrData[$i]["nombre"];
 
             $arrData[$i]['precioP'] = SMONEY . '' . formatMoney($arrData[$i]['precio']);
 
@@ -114,7 +114,7 @@ class Productos extends Controllers {
                 $arrResponse = array('status' => false, 'msg' => 'Datos no encontrados.');
             } else {
                 $arrData['precioP'] = SMONEY . '' . formatMoney($arrData['precio']);
-                $arrData['url_productImg'] = media() . '/dist/img/products/' . $arrData['imagen'];
+                $arrData['url_productImg'] = media() . '/img/products/' . $arrData['imagen'];
                 $arrResponse = array('status' => true, 'data' => $arrData);
             }
             echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
