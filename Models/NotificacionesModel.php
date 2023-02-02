@@ -4,7 +4,6 @@ class NotificacionesModel extends Mysql {
 
     private $idNotificacion;
     private $idPregunta;
-    private $idRespuesta;
     private $mensajeNotificacion;
     private $preguntaNotificacion;
     private $respuestaNotificacion;
@@ -33,12 +32,27 @@ class NotificacionesModel extends Mysql {
             DATE_FORMAT(created_at, '%H:%i:%s') as hora, status FROM notificaciones WHERE id = $this->idNotificacion";
         $request = $this->select($sql);
         $sqlSelect = "";
-        if ($request["tipo"] == TIPONOTQ) {
-            $sqlSelect = "SELECT pr.id, pr.pregunta,DATE_FORMAT(pr.created_at, '%d/%m/%Y') as fecha, 
-                    DATE_FORMAT(pr.created_at, '%H:%i:%s') as hora FROM preguntas pr WHERE pr.notificacion_id = " . $request["id"];
+        if ($request["tipo"] == TIPONOTV) {
+            $sqlSelect = "SELECT pr.id, pr.pregunta, rp.respuesta, rp.consejo, 
+                 DATE_FORMAT(pr.created_at, '%d/%m/%Y') as fecha, DATE_FORMAT(pr.created_at, '%H:%i:%s') as hora 
+                 FROM preguntas pr INNER JOIN respuestas rp ON rp.pregunta_id = pr.id
+                 WHERE pr.notificacion_id = " . $request["id"];
+            $request["notifacion_message"] = $this->select($sqlSelect);
         } else {
-            
+            $sqlSelect = "SELECT pr.id, pr.pregunta,DATE_FORMAT(pr.created_at, '%d/%m/%Y') as fecha, 
+            DATE_FORMAT(pr.created_at, '%H:%i:%s') as hora FROM preguntas pr WHERE pr.notificacion_id = " . $request["id"];
+            $requestQuestions = $this->select_all($sql);
+
+            if (count($requestQuestions) > 0) {
+                for ($i = 0; $i < count($requestQuestions); $i++) {
+                    $this->idPregunta = $requestQuestions[$i]["id"];
+                    $sqlAnswers = "SELECT rp.id ,rp.pregunta_id, rp.respuesta, rp.consejo FROM respuestas rp WHERE rp.pregunta_id =  $this->idPregunta";
+                    $requestQuestions[$i]["AnswersQ"] = $this->select_all($sqlAnswers);
+                }
+            }
+            $request["notifacion_message"] = $requestQuestions;
         }
+
         return $request;
     }
 
@@ -125,12 +139,24 @@ class NotificacionesModel extends Mysql {
         $this->idPregunta = $idQuestion;
         $this->respuestaNotificacion = $respuesta;
         $this->consejoNotificacion = $consejo;
-        $sql = "INSERT INTO respuestas(pregunta_id, respuesta, consejo) VALUES (?,?,?)";
+        $sql = "INSERT respuestas(pregunta_id, respuesta, consejo) VALUES (?,?,?)";
         $arrData = array($this->idPregunta,
             $this->respuestaNotificacion,
             $this->consejoNotificacion);
         $request_insert = $this->insert($sql, $arrData);
         $return = $request_insert;
+        return $return;
+    }
+
+    public function updateAnswer(int $idQuestion, string $respuesta, string $consejo) {
+        $this->idPregunta = $idQuestion;
+        $this->respuestaNotificacion = $respuesta;
+        $this->consejoNotificacion = $consejo;
+         $sql = "UPDATE respuestas SET respuesta =  ?, consejo = ? WHERE pregunta_id = $this->idPregunta";
+        $arrData = array($this->respuestaNotificacion,
+            $this->consejoNotificacion);
+        $request_update = $this->update($sql, $arrData);
+        $return = $request_update;
         return $return;
     }
 

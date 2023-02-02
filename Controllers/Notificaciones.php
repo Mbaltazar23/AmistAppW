@@ -37,7 +37,7 @@ class Notificaciones extends Controllers {
             $btnDelete = '';
             $arrData[$i]["nro"] = ($i + 1);
             if ($arrData[$i]['status'] == 1) {
-                $arrData[$i]['status'] = '<span class="badge badge-success">En Espera</span>';
+                $arrData[$i]['status'] = '<span class="badge badge-success">Activo</span>';
                 $btnView = '<button class="btn btn-info btn-sm" onClick="fntViewInfo(' . ($i + 1) . "," . $arrData[$i]['id'] . ')" title="Ver Notificacion"><i class="far fa-eye"></i></button>';
                 $btnEdit = '<button class="btn btn-primary  btn-sm" onClick="fntEditInfo(this,' . $arrData[$i]['id'] . ')" title="Editar Notificacion"><i class="fas fa-pencil-alt"></i></button>';
                 $btnDelete = '<button class="btn btn-danger btn-sm" onClick="fntDelInfo(' . $arrData[$i]['id'] . ')" title="Eliminar Notificacion"><i class="far fa-trash-alt"></i></button>';
@@ -77,7 +77,7 @@ class Notificaciones extends Controllers {
                 $titleNotificacion = ucwords($_POST["title"]);
                 $listTypeNotificacion = strClean($_POST["listTipoNotificacion"]);
                 $Question = isset($_POST["Question"]) ? ucwords($_POST["Question"]) : ucwords($_POST["Message"]);
-                $ArrAnswers = $_POST["Answers"];
+                $ArrAnswers = isset($_POST["Answers"]) ? $_POST["Answers"] : "";
                 $idQuestion = isset($_POST["idQuestion"]) ? intval($_POST["idQuestion"]) : "";
                 $Message = isset($_POST["Message"]) ? ucwords($_POST["Message"]) : "";
                 $Response = isset($_POST["Response"]) ? ucfirst($_POST["Response"]) : "";
@@ -88,7 +88,7 @@ class Notificaciones extends Controllers {
                     $request_notificacion = $this->model->insertNotificacion($titleNotificacion, $listTypeNotificacion);
                     $option = 1;
                 } else {
-                    $request_notificacion = $this->model->updateNotificacion($idNotificacion, $titleNotificacion, $listTypeNotificacion);
+                    $request_notificacion = $this->model->updateNotificacion($idNotificacion, $listTypeNotificacion, $titleNotificacion);
                     $option = 2;
                 }
 
@@ -111,9 +111,57 @@ class Notificaciones extends Controllers {
                         }
                     } else {
                         $arrResponse = array('status' => true, 'msg' => 'Notificacion actualizada Exitosamente !!');
+
+                        $this->model->updateQuestion($idQuestion, $idNotificacion, $Message);
+
+                        $this->model->updateAnswer($idQuestion, $Response, $Advice);
                     }
                 } else if ($request_notificacion == 'exist') {
                     $arrResponse = array('status' => false, 'msg' => '¡Atención! La notificacion ya existe.');
+                } else {
+                    $arrResponse = array("status" => false, "msg" => 'No es posible almacenar los datos.');
+                }
+            }
+            echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    public function setQuestion() {
+        if ($_POST) {
+            if (empty($_POST['Question']) || empty($_POST["Answers"])) {
+                $arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
+            } else {
+                $idNotificacion = intval($_POST["idNotificacion"]);
+                $idQuestion = intval($_POST["idQuestion"]);
+                $strQuestion = strClean(ucwords($_POST["Question"]));
+                $ArrAnswers = isset($_POST["Answers"]) ? $_POST["Answers"] : "";
+                $request_question = "";
+
+                if ($idQuestion == 0) {
+                    $request_question = $this->model->insertQuestion($idNotificacion, $strQuestion);
+                    $option = 1;
+                } else {
+                    $request_question = $this->model->updateQuestion($idQuestion, $idNotificacion, $strQuestion);
+                    $option = 2;
+                }
+
+                if ($request_question > 0) {
+                    if ($option == 1) {
+                        $arrResponse = array('status' => true, 'msg' => 'Pregunta registrada Exitosamente !!');
+                        foreach ($ArrAnswers['answers'] as $answer) {
+                            $respuesta = ucfirst($answer["answer"]);
+                            $consejo = ucfirst($answer["advice"]);
+                            $this->model->insertAnswer($request_question, $respuesta, $consejo);
+                        }
+                    } else {
+                        $arrResponse = array('status' => true, 'msg' => 'Pregunta actualizada Exitosamente !!');
+
+                        foreach ($ArrAnswers['answers'] as $answer) {
+                            $respuesta = ucfirst($answer["answer"]);
+                            $consejo = ucfirst($answer["advice"]);
+                            $this->model->updateAnswer($idQuestion, $respuesta, $consejo);
+                        }
+                    }
                 } else {
                     $arrResponse = array("status" => false, "msg" => 'No es posible almacenar los datos.');
                 }

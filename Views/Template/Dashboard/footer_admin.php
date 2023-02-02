@@ -27,9 +27,6 @@
 <script src="<?= media() ?>/js/plugins/jszip/jszip.min.js"></script>
 <script src="<?= media() ?>/js/plugins/pdfmake/pdfmake.min.js"></script>
 <script src="<?= media() ?>/js/plugins/pdfmake/vfs_fonts.js"></script>
-<script src="<?= media() ?>/js/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="<?= media() ?>/js/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="<?= media() ?>/js/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <!-- SweetAlert2 -->
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script src="<?= media(); ?>/js/plugins/sweetalert2/swettalert.min.js" type="text/javascript"></script>
