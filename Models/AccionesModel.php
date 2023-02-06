@@ -9,7 +9,6 @@ class AccionesModel extends Mysql {
 
     private $idAccion;
     private $nombreAccion;
-    private $puntosAccion;
     private $statusAccion;
 
     public function __construct() {
@@ -35,16 +34,14 @@ class AccionesModel extends Mysql {
         return $request;
     }
 
-    public function insertAccion(string $nombre, int $puntos) {
+    public function insertAccion(string $nombre) {
         $this->nombreAccion = $nombre;
-        $this->puntosAccion = $puntos;
         $return = 0;
         $sql = "SELECT * FROM acciones WHERE nombre = '$this->nombreAccion'";
         $request = $this->select_all($sql);
         if (empty($request)) {
-            $query_insert = "INSERT INTO acciones(nombre, puntos) VALUES (?,?)";
-            $arrData = array($this->nombreAccion,
-                $this->puntosAccion);
+            $query_insert = "INSERT INTO acciones(nombre) VALUES (?)";
+            $arrData = array($this->nombreAccion);
             $request_insert = $this->insert($query_insert, $arrData);
             $return = $request_insert;
         } else {
@@ -53,16 +50,14 @@ class AccionesModel extends Mysql {
         return $return;
     }
 
-    public function updateAccion(string $nombre, int $puntos, int $id) {
+    public function updateAccion(string $nombre, int $id) {
         $this->nombreAccion = $nombre;
-        $this->puntosAccion = $puntos;
         $this->idAccion = $id;
         $sql = "SELECT * FROM acciones WHERE nombre = '$this->nombreAccion' AND id != $this->idAccion";
         $request = $this->select_all($sql);
         if (empty($request)) {
-            $sql = "UPDATE acciones SET nombre = ?, puntos = ? WHERE id = $this->idAccion";
-            $params = array($this->nombreAccion,
-                $this->puntosAccion);
+            $sql = "UPDATE acciones SET nombre = ?WHERE id = $this->idAccion";
+            $params = array($this->nombreAccion);
             $request = $this->update($sql, $params);
         } else {
             $request = "exist";
@@ -73,7 +68,7 @@ class AccionesModel extends Mysql {
     public function updateStatusAccion(int $idAccion, int $status) {
         $this->idAccion = $idAccion;
         $this->statusAccion = $status;
-        $sql = "SELECT * FROM puntos_alumnos_envio WHERE action_id  = $this->idAccion";
+        $sql = "SELECT * FROM puntos_alumnos_envio WHERE accion_id  = $this->idAccion";
         $request = $this->select_all($sql);
         if (empty($request)) {
             $sql = "UPDATE acciones SET status = ? WHERE id = $this->idAccion";

@@ -317,7 +317,6 @@ function fntDelSchool(idadmin) {
             };
         }
     });
-
 }
 
 function fntColegios() {

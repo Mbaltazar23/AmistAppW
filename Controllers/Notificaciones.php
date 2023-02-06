@@ -79,6 +79,7 @@ class Notificaciones extends Controllers {
                 $Question = isset($_POST["Question"]) ? ucwords($_POST["Question"]) : ucwords($_POST["Message"]);
                 $ArrAnswers = isset($_POST["Answers"]) ? $_POST["Answers"] : "";
                 $idQuestion = isset($_POST["idQuestion"]) ? intval($_POST["idQuestion"]) : "";
+                $idAnswers = isset($_POST["idAnswers"]) ? intval($_POST["idAnswers"]) : "";
                 $Message = isset($_POST["Message"]) ? ucwords($_POST["Message"]) : "";
                 $Response = isset($_POST["Response"]) ? ucfirst($_POST["Response"]) : "";
                 $Advice = isset($_POST["Advice"]) ? ucfirst($_POST["Advice"]) : "";
@@ -96,7 +97,7 @@ class Notificaciones extends Controllers {
                     if ($option == 1) {
                         $arrResponse = array('status' => true, 'msg' => 'Notificacion registrada Exitosamente !!');
 
-                        if ($listTypeNotificacion == "Pregunta") {
+                        if ($listTypeNotificacion == TIPONOTQ) {
                             $request_question = $this->model->insertQuestion($request_notificacion, $Question);
 
                             foreach ($ArrAnswers['answers'] as $answer) {
@@ -111,10 +112,12 @@ class Notificaciones extends Controllers {
                         }
                     } else {
                         $arrResponse = array('status' => true, 'msg' => 'Notificacion actualizada Exitosamente !!');
+                        if ($listTypeNotificacion == TIPONOTV) {
 
-                        $this->model->updateQuestion($idQuestion, $idNotificacion, $Message);
+                            $this->model->updateQuestion($idQuestion, $idNotificacion, $Message);
 
-                        $this->model->updateAnswer($idQuestion, $Response, $Advice);
+                            $this->model->updateAnswer($idAnswers, $Response, $Advice);
+                        }
                     }
                 } else if ($request_notificacion == 'exist') {
                     $arrResponse = array('status' => false, 'msg' => '¡Atención! La notificacion ya existe.');
@@ -157,9 +160,10 @@ class Notificaciones extends Controllers {
                         $arrResponse = array('status' => true, 'msg' => 'Pregunta actualizada Exitosamente !!');
 
                         foreach ($ArrAnswers['answers'] as $answer) {
+                            $idRespuesta = intval($answer["id"]);
                             $respuesta = ucfirst($answer["answer"]);
                             $consejo = ucfirst($answer["advice"]);
-                            $this->model->updateAnswer($idQuestion, $respuesta, $consejo);
+                            $this->model->updateAnswer($idRespuesta, $respuesta, $consejo);
                         }
                     }
                 } else {
@@ -196,7 +200,7 @@ class Notificaciones extends Controllers {
         }
     }
 
-    public function setStatusColegio() {
+    public function setStatusNotificacion() {
         if ($_POST) {
             $intIdNotificacion = intval($_POST['idNotificacion']);
             $status = intval($_POST['status']);
@@ -217,4 +221,24 @@ class Notificaciones extends Controllers {
         die();
     }
 
+    public function removeQuestionNotificacion() {
+        if ($_POST) {
+            $intIdQuestion = intval($_POST['idQuestion']);
+            $requestDelete = $this->model->removeDetailQuestion($intIdQuestion);
+            if ($requestDelete == 'ok') {
+                $arrResponse = array('status' => true, 'msg' => "Pregunta Eliminada Exitosamente...");
+            } else if ($requestDelete == 'exist') {
+                $arrResponse = array('status' => false, 'msg' => 'No es posible remover esta pregunta por ya estar en uso..');
+            } else {
+                $arrResponse = array('status' => false, 'msg' => 'Error al eliminar/activar el administrador.');
+            }
+            echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
+        }
+        die();
+    }
+
+    public function getNotificacionesReport() {
+        $listNotificaciones = $this->model->selectNotificaciones();
+        echo json_encode($listNotificaciones, JSON_UNESCAPED_UNICODE);
+    }
 }

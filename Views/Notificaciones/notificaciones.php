@@ -35,7 +35,7 @@ getModal('modalNotificaciones', $data);
                                     </button>
                                     <div class="dropdown-menu" role="menu">
                                         <a class="dropdown-item" onclick="openModal();">Nuevo</a>
-                                        <a class="dropdown-item" >Generar Reporte</a>
+                                        <a class="dropdown-item" onclick="generarReporte()">Generar Reporte</a>
                                     </div>
                                 </div>
                             </div>

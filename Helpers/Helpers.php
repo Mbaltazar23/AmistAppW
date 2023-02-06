@@ -75,23 +75,16 @@ function sendEmail($data, $template) {
     return $send;
 }
 
-function suscripcionCli(int $idpersona) {
-    require_once ("Models/SuscripcionesModel.php");
-    $objSuscrip = new SuscripcionesModel();
-    $request = $objSuscrip->getSuscripcionCliente($idpersona);
-    return $request;
-}
-
 //metodo que servira para la subida de imagenes
 function uploadImage(array $data, string $name, string $ruta) {
     $url_temp = $data['tmp_name'];
-    $destino = 'Assets/dist/img/' . $ruta . '/' . $name;
+    $destino = 'Assets/img/' . $ruta . '/' . $name;
     $move = move_uploaded_file($url_temp, $destino);
     return $move;
 }
 
 function deleteFile(string $name, string $ruta) {
-    unlink($destino = 'Assets/dist/img/' . $ruta . '/' . $name);
+    unlink($destino = 'Assets/img/' . $ruta . '/' . $name);
 }
 
 //Elimina exceso de espacios entre palabras
