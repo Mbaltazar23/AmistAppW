@@ -7,8 +7,8 @@
 class ColegiosModel extends Mysql {
 
     public $intIdColegio;
-    public $strNombre;
     public $strRut;
+    public $strNombre;
     public $strDireccion;
     public $strTelefono;
     public $intStatus;
@@ -20,7 +20,7 @@ class ColegiosModel extends Mysql {
     public function selectColegios($option = NULL) {
         $this->intStatus = $option != NULL ? "WHERE c.status != 0" : "";
         $sql = "SELECT c.id, c.nombre, DATE_FORMAT(c.created_at, '%d/%m/%Y') as fecha, 
-            DATE_FORMAT(c.created_at, '%H:%i:%s') as hora,c.rut, c.direccion, c.telefono, c.status
+            DATE_FORMAT(c.created_at, '%H:%i:%s') as hora, c.rut, c.direccion, c.telefono, c.status
             FROM colegios c $this->intStatus";
         $request = $this->select_all($sql);
         return $request;
@@ -56,7 +56,7 @@ class ColegiosModel extends Mysql {
         return $return;
     }
 
-    public function updateColegio(int $id, string $nombre,string $rut,string $direccion, string $telefono) {
+    public function updateColegio(int $id, string $nombre, string $rut, string $direccion, string $telefono) {
         $this->intIdcolegio = $id;
         $this->strNombre = $nombre;
         $this->strRut = $rut;

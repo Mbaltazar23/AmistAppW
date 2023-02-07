@@ -229,6 +229,8 @@ function navDashboardAdmin() {
                 )
             )
         );
+    }else if ($_SESSION['rol'] == ROLADMINCOLE) {
+        
     }
     return $navAdmin;
 }

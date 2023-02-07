@@ -30,6 +30,15 @@ class AdminColegioModel extends Mysql {
                 FROM usuarios usr INNER JOIN roles_usuarios rl ON usr.id = rl.user_id 
                 WHERE rl.role = '$this->strRole' $this->intStatus";
         $request = $this->select_all($sql);
+        for ($i = 0; $i < count($request); $i++) {
+            $this->intIdUsuario = $request[$i]["id"];
+            if ($request[$i]["status"] != 1) {
+                $sqlSchool = "SELECT cu.id as idVin, c.id,c.rut,c.nombre FROM colegios_usuarios cu 
+                    INNER JOIN colegios c ON cu.colegio_id = c.id WHERE cu.user_id = $this->intIdUsuario";
+                $requesSch = $this->select($sqlSchool);
+                $request[$i]["school"] = $requesSch;
+            }
+        }
         return $request;
     }
 

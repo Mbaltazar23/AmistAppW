@@ -20,16 +20,16 @@ class AccionesModel extends Mysql {
         if ($opcion != NULL) {
             $validateStatus = "WHERE ac.status != 0";
         }
-        $sql = "SELECT ac.nombre, ac.puntos, DATE_FORMAT(ac.created_at, '%d/%m/%Y') as fecha, 
-            DATE_FORMAT(ac.created_at, '%H:%i:%s') as hora, pt.puntos FROM acciones ac $validateStatus";
+        $sql = "SELECT ac.id, ac.nombre, ac.puntos, DATE_FORMAT(ac.created_at, '%d/%m/%Y') as fecha, ac.status,
+            DATE_FORMAT(ac.created_at, '%H:%i:%s') as hora FROM acciones ac $validateStatus";
         $request = $this->select_all($sql);
         return $request;
     }
 
     public function selectAccion(int $idAccion) {
         $this->idAccion = $idAccion;
-        $sql = "SELECT ac.nombre, ac.puntos, DATE_FORMAT(ac.created_at, '%d/%m/%Y') as fecha, 
-            DATE_FORMAT(ac.created_at, '%H:%i:%s') as hora, pt.puntos FROM acciones ac WHERE ac.id = $this->idAccion;";
+        $sql = "SELECT ac.id,ac.nombre, ac.puntos, DATE_FORMAT(ac.created_at, '%d/%m/%Y') as fecha, ac.status,
+            DATE_FORMAT(ac.created_at, '%H:%i:%s') as hora FROM acciones ac WHERE ac.id = $this->idAccion;";
         $request = $this->select($sql);
         return $request;
     }
@@ -50,13 +50,13 @@ class AccionesModel extends Mysql {
         return $return;
     }
 
-    public function updateAccion(string $nombre, int $id) {
+    public function updateAccion(int $id, string $nombre) {
         $this->nombreAccion = $nombre;
         $this->idAccion = $id;
         $sql = "SELECT * FROM acciones WHERE nombre = '$this->nombreAccion' AND id != $this->idAccion";
         $request = $this->select_all($sql);
         if (empty($request)) {
-            $sql = "UPDATE acciones SET nombre = ?WHERE id = $this->idAccion";
+            $sql = "UPDATE acciones SET nombre = ? WHERE id = $this->idAccion";
             $params = array($this->nombreAccion);
             $request = $this->update($sql, $params);
         } else {

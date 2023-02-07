@@ -12,7 +12,8 @@ class CategoriasModel extends Mysql {
 
     public function selectCategorias($option = NULL) {
         $this->intStatus = $option != NULL ? "WHERE status != 0" : "";
-        $sql = "SELECT id, nombre, status FROM categorias $this->intStatus";
+        $sql = "SELECT id, nombre, DATE_FORMAT(created_at, '%d/%m/%Y') as fecha, 
+            DATE_FORMAT(created_at, '%H:%i:%s') as hora, status FROM categorias $this->intStatus";
         $request = $this->select_all($sql);
         return $request;
     }

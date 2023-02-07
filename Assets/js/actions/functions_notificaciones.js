@@ -56,10 +56,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     var title = document.getElementById("titleQuestion").value;
                     var question = document.getElementById("question").value;
                     var answer1 = document.getElementById("answer1").value;
-                    var advice1 = document.getElementById("advice1").value;
                     var answer2 = document.getElementById("answer2").value;
-                    var advice2 = document.getElementById("advice2").value;
                     var answer3 = document.getElementById("answer3").value;
+                    var advice1 = document.getElementById("advice1").value;
+                    var advice2 = document.getElementById("advice2").value;
                     var advice3 = document.getElementById("advice3").value;
                     var answers = [
                         {answer: answer1, advice: advice1},

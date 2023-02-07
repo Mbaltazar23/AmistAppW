@@ -36,7 +36,7 @@ getModal('modalCategorias', $data);
                                     </button>
                                     <div class="dropdown-menu" role="menu">
                                         <a class="dropdown-item" onclick="openModal();">Nuevo</a>
-                                        <a class="dropdown-item" >Generar Reporte</a>
+                                        <a class="dropdown-item" onclick="generarReporte();">Generar Reporte</a>
                                     </div>
                                 </div>
                             </div>
@@ -47,6 +47,8 @@ getModal('modalCategorias', $data);
                                     <tr>
                                         <th>Nro</th>
                                         <th>Nombre</th>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
                                         <th>Status</th>
                                         <th>Acciones</th>
                                     </tr>

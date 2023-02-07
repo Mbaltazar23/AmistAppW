@@ -137,4 +137,9 @@ class Colegios extends Controllers {
         die();
     }
 
+    public function getColegiosReport() {
+        $listColegios = $this->model->selectColegios();
+        echo json_encode($listColegios, JSON_UNESCAPED_UNICODE);
+    }
+
 }

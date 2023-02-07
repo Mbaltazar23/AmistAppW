@@ -1,52 +1,47 @@
-let tableColegio;
+let tableAcciones;
 let rowTable = "";
 document.addEventListener('DOMContentLoaded', function () {
-    validadorRut('txtRut');
-    tableColegio = $('#tableColegios').dataTable({
+    tableAcciones = $('#tableAcciones').dataTable({
         "aProcessing": true,
         "aServerSide": true,
         "language": {
             "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
         },
         "ajax": {
-            "url": " " + base_url + "/Colegios/getColegios",
+            "url": " " + base_url + "/Acciones/getAcciones",
             "dataSrc": ""
         },
         "columns": [
-            {"data": "rut"},
+            {"data": "nro"},
             {"data": "nombre"},
-            {"data": "telefono"},
+            {"data": "fecha"},
+            {"data": "hora"},
             {"data": "status"},
             {"data": "options"}
         ],
-        responsive: true,
+       "paging": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
         "bDestroy": true,
         "iDisplayLength": 10,
         "order": [[0, "asc"]]
     });
 
-
-
-    let formColegio = document.querySelector("#formColegio");
-    formColegio.onsubmit = function (e) {
+    //NUEVA ACCION
+    let formAccion = document.querySelector("#formAccion");
+    formAccion.onsubmit = function (e) {
         e.preventDefault();
-        let txtRut = document.querySelector('#txtRut').value;
         let strNombre = document.querySelector('#txtNombre').value;
-        let txtTelefono = $('#txtTelefono').val();
-        //var regexClave = new RegExp("^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
-        var regulTele = /^(\+?56)?(\s?)(0?9)(\s?)[9876543]\d{7}$/;
-        if (strNombre == '' || txtRut == '' || txtTelefono == '')
+        if (strNombre == '')
         {
-            swal("Atención", "Debe ingresar datos para crear al Admin", "error");
-            return false;
-        } else if (!regulTele.test(txtTelefono.trim())) {
-            swal("Por favor", "Ingrese un Telefono Valido para registrarse...", "error");
-            $("#txtTelefono").val("+569");
+            swal("Atención", "Debe ingresar un nombre..", "error");
             return false;
         } else {
             let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-            let ajaxUrl = base_url + '/Colegios/setColegio';
-            let formData = new FormData(formColegio);
+            let ajaxUrl = base_url + '/Acciones/setAccion';
+            let formData = new FormData(formAccion);
             request.open("POST", ajaxUrl, true);
             request.send(formData);
             request.onreadystatechange = function () {
@@ -55,9 +50,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     let objData = JSON.parse(request.responseText);
                     if (objData.status)
                     {
-                        tableColegio.api().ajax.reload();
-                        $('#modalFormColegios').modal("hide");
-                        formColegio.reset();
+                        tableAcciones.api().ajax.reload();
+                        $('#modalFormAcciones').modal("hide");
+                        formAccion.reset();
                         swal("Exito !!", objData.msg, "success");
                     } else {
                         swal("Error", objData.msg, "error");
@@ -70,9 +65,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 }, false);
 
-function fntViewInfo(idColegio) {
+function fntViewInfo(nro, idaccione) {
     let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    let ajaxUrl = base_url + '/Colegios/getColegio/' + idColegio;
+    let ajaxUrl = base_url + '/Acciones/getAccion/' + idaccione;
     request.open("GET", ajaxUrl, true);
     request.send();
     request.onreadystatechange = function () {
@@ -81,19 +76,14 @@ function fntViewInfo(idColegio) {
             if (objData.status)
             {
                 let estado = objData.data.status == 1 ?
-                        '<span class="badge badge-success">En espera</span>' :
-                        '<span class="badge badge-dark">Vinculado</span>';
-
-                let direccion = objData.data.direccion != "" ? objData.data.direccion : "No se tiene una direccion registrada";
-                document.querySelector("#celRut").innerHTML = objData.data.rut;
+                        '<span class="badge badge-success">Activo</span>' :
+                        '<span class="badge badge-danger">Inactivo</span>';
+                document.querySelector("#celNro").innerHTML = nro;
                 document.querySelector("#celNombre").innerHTML = objData.data.nombre;
-                document.querySelector("#celTelefono").innerHTML = objData.data.telefono;
-                document.querySelector("#celDireccion").innerHTML = direccion;
+                document.querySelector("#celEstado").innerHTML = estado;
                 document.querySelector("#celFecha").innerHTML = objData.data.fecha;
                 document.querySelector("#celHora").innerHTML = objData.data.hora;
-                document.querySelector("#celStatus").innerHTML = estado;
-
-                $('#modalViewAdmin').modal('show');
+                $('#modalViewAccion').modal('show');
             } else {
                 swal("Error", objData.msg, "error");
             }
@@ -101,13 +91,13 @@ function fntViewInfo(idColegio) {
     };
 }
 
-function fntEditInfo(element, idColegio) {
+function fntEditInfo(element, idaccion) {
     rowTable = element.parentNode.parentNode.parentNode;
-    document.querySelector('#titleModal').innerHTML = "Actualizar Colegio";
+    document.querySelector('#titleModal').innerHTML = "Actualizar Accion";
     document.querySelector('#btnActionForm').classList.replace("btn-primary", "btn-info");
     document.querySelector('#btnText').innerHTML = "Actualizar";
     let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    let ajaxUrl = base_url + '/Colegios/getColegio/' + idColegio;
+    let ajaxUrl = base_url + '/Acciones/getAccion/' + idaccion;
     request.open("GET", ajaxUrl, true);
     request.send();
     request.onreadystatechange = function () {
@@ -115,13 +105,11 @@ function fntEditInfo(element, idColegio) {
             let objData = JSON.parse(request.responseText);
             if (objData.status)
             {
-                document.querySelector("#idColegio").value = objData.data.id;
-                document.querySelector("#txtRut").value = objData.data.rut;
-                document.querySelector("#txtNombre").value = objData.data.nombre.toString().toLowerCase();
-                document.querySelector("#txtTelefono").value = objData.data.telefono;
-                document.querySelector("#txtDireccion").value = objData.data.direccion.toString().toLowerCase();
+                document.querySelector("#idAccion").value = objData.data.id;
+                document.querySelector("#txtNombre").value = String(objData.data.nombre).toLowerCase();
 
-                $('#modalFormColegios').modal('show');
+                $('#modalFormAcciones').modal('show');
+
             } else {
                 swal("Error", objData.msg, "error");
             }
@@ -129,19 +117,18 @@ function fntEditInfo(element, idColegio) {
     };
 }
 
-
-function fntDelInfo(idcolegio) {
+function fntDelInfo(idaccion) {
     swal({
-        title: "Inhabilitar Colegio",
-        text: "¿Realmente quiere inhabilitar a este colegio?",
+        title: "Inhabilitar Accion",
+        text: "¿Realmente quiere inhabilitar esta accion?",
         icon: "warning",
         dangerMode: true,
         buttons: true
     }).then((isClosed) => {
         if (isClosed) {
             let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-            let ajaxUrl = base_url + '/Colegios/setStatusColegio';
-            let strData = "idColegio=" + idcolegio + "&status=0";
+            let ajaxUrl = base_url + '/Acciones/setStatusAccion';
+            let strData = "idAccion=" + idaccion + "&status=0";
             request.open("POST", ajaxUrl, true);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(strData);
@@ -150,8 +137,8 @@ function fntDelInfo(idcolegio) {
                     let objData = JSON.parse(request.responseText);
                     if (objData.status)
                     {
-                        swal("Inhabilitado !!", objData.msg, "success");
-                        tableColegio.api().ajax.reload();
+                        swal("Inhabilitada!", objData.msg, "success");
+                        tableAcciones.api().ajax.reload();
                     } else {
                         swal("Atención!", objData.msg, "error");
                     }
@@ -162,18 +149,18 @@ function fntDelInfo(idcolegio) {
 
 }
 
-function fntActivateInfo(idcolegio) {
+function fntActivateInfo(idaccion) {
     swal({
-        title: "Habilitar Colegio",
-        text: "¿Realmente quiere habilitar a este colegio?",
+        title: "Habilitar Accion",
+        text: "¿Realmente quiere habilitar esta accion?",
         icon: "info",
         dangerMode: true,
         buttons: true
     }).then((isClosed) => {
         if (isClosed) {
             let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-            let ajaxUrl = base_url + '/Colegios/setStatusColegio';
-            let strData = "idColegio=" + idcolegio + "&status=1";
+            let ajaxUrl = base_url + '/Acciones/setStatusAccion';
+            let strData = "idAccion=" + idaccion + "&status=1";
             request.open("POST", ajaxUrl, true);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(strData);
@@ -182,8 +169,8 @@ function fntActivateInfo(idcolegio) {
                     let objData = JSON.parse(request.responseText);
                     if (objData.status)
                     {
-                        swal("Activada !!", objData.msg, "success");
-                        tableColegio.api().ajax.reload();
+                        swal("Activada!", objData.msg, "success");
+                        tableAcciones.api().ajax.reload();
                     } else {
                         swal("Atención!", objData.msg, "error");
                     }
@@ -194,42 +181,43 @@ function fntActivateInfo(idcolegio) {
 
 }
 
-
 function openModal() {
-    document.querySelector('#idColegio').value = "";
+    document.querySelector('#idAccion').value = "";
+    document.querySelector('.modal-header').classList.replace("headerUpdate", "headerRegister");
     document.querySelector('#btnActionForm').classList.replace("btn-info", "btn-primary");
     document.querySelector('#btnText').innerHTML = "Guardar";
-    document.querySelector('#titleModal').innerHTML = "Nuevo Colegio";
-    document.querySelector("#formColegio").reset();
-    $('#modalFormColegios').modal('show');
+    document.querySelector('#titleModal').innerHTML = "Nueva Accion";
+    document.querySelector("#formAccion").reset();
+    $('#modalFormAcciones').modal('show');
 }
 
 
+
 function generarReporte() {
-    $.post(base_url + "/Colegios/getColegiosReport",
+    $.post(base_url + "/Acciones/getAccionesReport",
             function (response) {
                 var fecha = new Date();
-                let colegios = JSON.parse(response);
+                let acciones = JSON.parse(response);
                 //console.log(notificaciones);
                 //console.log(tecnicos);
                 let estado = "";
                 var pdf = new jsPDF();
-                var columns = ["RUT", "NOMBRE", "TELEFONO", "DIRECCION", "ESTADO"];
+                var columns = ["NRO", "NOMBRE", "FECHA", "HORA", "ESTADO"];
                 var data = [];
 
 
-                for (let i = 0; i < colegios.length; i++) {
-                    if (colegios[i].status == 1) {
+                for (let i = 0; i < acciones.length; i++) {
+                    if (acciones[i].status == 1) {
                         estado = "ACTIVO";
                     } else {
                         estado = "INACTIVO";
                     }
-                    data[i] = [colegios[i].rut, colegios[i].nombre, colegios[i].telefono, colegios[i].hora, estado];
+                    data[i] = [(i + 1), acciones[i].nombre, acciones[i].fecha, acciones[i].hora, estado];
 
                 }
 
 
-                pdf.text(20, 20, "Reportes de las colegios Registradas");
+                pdf.text(20, 20, "Reportes de las Acciones Registradas");
 
                 pdf.autoTable(columns, data, {
                     startY: 40,
@@ -248,7 +236,7 @@ function generarReporte() {
 
 
                 pdf.text(20, pdf.autoTable.previous.finalY + 20, "Fecha de Creacion : " + fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear());
-                pdf.save('ReporteColegios.pdf');
+                pdf.save('ReporteAcciones.pdf');
                 swal('Exito', "Reporte Imprimido Exitosamente..", 'success');
 
             }

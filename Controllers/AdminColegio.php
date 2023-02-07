@@ -134,8 +134,8 @@ class AdminColegio extends Controllers {
         }
         die();
     }
-    
-     public function setDetailColegio() {
+
+    public function setDetailColegio() {
         if ($_POST) {
             if (empty($_POST['listColegios'])) {
                 $arrResponse = array("status" => false, "msg" => 'Datos incorrectos.');
@@ -182,6 +182,11 @@ class AdminColegio extends Controllers {
             echo json_encode($arrResponse, JSON_UNESCAPED_UNICODE);
         }
         die();
+    }
+
+    public function getAdminColegioReport() {
+        $arrData = $this->model->selectAdmins();
+        echo json_encode($arrData, JSON_UNESCAPED_UNICODE);
     }
 
 }

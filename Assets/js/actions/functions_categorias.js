@@ -14,10 +14,16 @@ document.addEventListener('DOMContentLoaded', function () {
         "columns": [
             {"data": "nro"},
             {"data": "nombre"},
+            {"data": "fecha"},
+            {"data": "hora"},
             {"data": "status"},
             {"data": "options"}
         ],
-        responsive: true,
+        "paging": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
         "bDestroy": true,
         "iDisplayLength": 10,
         "order": [[0, "asc"]]
@@ -186,3 +192,53 @@ function openModal() {
 }
 
 
+
+function generarReporte() {
+    $.post(base_url + "/Categorias/getCategoriasReport",
+            function (response) {
+                var fecha = new Date();
+                let categorias = JSON.parse(response);
+                //console.log(notificaciones);
+                //console.log(tecnicos);
+                let estado = "";
+                var pdf = new jsPDF();
+                var columns = ["NRO", "NOMBRE", "FECHA", "HORA", "ESTADO"];
+                var data = [];
+
+
+                for (let i = 0; i < categorias.length; i++) {
+                    if (categorias[i].status == 1) {
+                        estado = "ACTIVO";
+                    } else {
+                        estado = "INACTIVO";
+                    }
+                    data[i] = [(i + 1), categorias[i].nombre, categorias[i].fecha, categorias[i].hora, estado];
+
+                }
+
+
+                pdf.text(20, 20, "Reportes de las Categorias Registradas");
+
+                pdf.autoTable(columns, data, {
+                    startY: 40,
+                    styles: {
+                        cellPadding: 10,
+                        fontSize: 8,
+                        font: 'helvetica',
+                        textColor: [0, 0, 0],
+                        fillColor: [255, 255, 255],
+                        lineWidth: 0.1,
+                        halign: 'center',
+                        valign: 'middle'
+                    }
+                });
+
+
+
+                pdf.text(20, pdf.autoTable.previous.finalY + 20, "Fecha de Creacion : " + fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear());
+                pdf.save('ReporteCategorias.pdf');
+                swal('Exito', "Reporte Imprimido Exitosamente..", 'success');
+
+            }
+    );
+}

@@ -3,14 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/AmistAppWeb/Helpers/Helpers.php</file>
-            <file>file:/C:/xampp/htdocs/AmistAppWeb/Controllers/Acciones.php</file>
-            <file>file:/C:/xampp/htdocs/AmistAppWeb/Views/Template/Dashboard/footer_admin.php</file>
-            <file>file:/C:/xampp/htdocs/AmistAppWeb/Views/Acciones/acciones.php</file>
+            <file>file:/C:/xampp/htdocs/AmistAppWeb/Assets/js/actions/functions_acciones.js</file>
+            <file>file:/C:/xampp/htdocs/AmistAppWeb/Models/CategoriasModel.php</file>
+            <file>file:/C:/xampp/htdocs/AmistAppWeb/Assets/js/actions/functions_colegios.js</file>
+            <file>file:/C:/xampp/htdocs/AmistAppWeb/Assets/js/actions/functions_admincolegio.js</file>
             <file>file:/C:/xampp/htdocs/AmistAppWeb/Assets/js/actions/functions_notificaciones.js</file>
-            <file>file:/C:/xampp/htdocs/AmistAppWeb/Controllers/Categorias.php</file>
-            <file>file:/C:/xampp/htdocs/AmistAppWeb/Models/AccionesModel.php</file>
-            <file>file:/C:/xampp/htdocs/AmistAppWeb/Controllers/Notificaciones.php</file>
         </group>
     </open-files>
 </project-private>

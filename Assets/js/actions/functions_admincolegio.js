@@ -20,7 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
             {"data": "status"},
             {"data": "options"}
         ],
-        responsive: true,
+         "paging": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
         "bDestroy": true,
         "iDisplayLength": 10,
         "order": [[0, "asc"]]
@@ -74,9 +78,9 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         let listColegios = document.querySelector("#listColegios").value;
         if (listColegios == '') {
-         swal("Atención", "Debe ingresar datos para crear al Admin", "error");
+            swal("Atención", "Debe ingresar datos para crear al Admin", "error");
             return false;
-        }else {
+        } else {
             let request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
             let ajaxUrl = base_url + '/AdminColegio/setDetailColegio';
             let formData = new FormData(formColegioA);
@@ -329,4 +333,59 @@ function fntColegios() {
             }
         });
     }
+}
+
+function generarReporte() {
+    $.post(base_url + "/AdminColegio/getAdminColegioReport",
+            function (response) {
+                var fecha = new Date();
+                let adminsColegio = JSON.parse(response);
+                //console.log(notificaciones);
+                //console.log(tecnicos);
+                let estado = "";
+                var pdf = new jsPDF();
+                var columns = ["DNI", "NOMBRE", "TELEFONO", "DIRECCION", "ESTADO"];
+                var data = [];
+
+
+                for (let i = 0; i < adminsColegio.length; i++) {
+                    if (adminsColegio[i].status == 1) {
+                        estado = "ACTIVO";
+                    } else {
+                        estado = "VINCULADO";
+                    }
+
+                    data[i] = [adminsColegio[i].dni,
+                        adminsColegio[i].nombre,
+                        adminsColegio[i].telefono,
+                        adminsColegio[i].direccion != ""
+                                ? adminsColegio[i].direccion
+                                : "No tiene una dirección registrada",
+                        estado
+                    ];
+                }
+
+                pdf.text(20, 20, "Reportes de los Administradores de Colegios Registrados");
+
+                pdf.autoTable(columns, data, {
+                    startY: 40,
+                    styles: {
+                        cellPadding: 10,
+                        fontSize: 8,
+                        font: 'helvetica',
+                        textColor: [0, 0, 0],
+                        fillColor: [255, 255, 255],
+                        lineWidth: 0.1,
+                        halign: 'center',
+                        valign: 'middle'
+                    }
+                });
+
+
+
+                pdf.text(20, pdf.autoTable.previous.finalY + 20, "Fecha de Creacion : " + fecha.getDate() + "/" + (fecha.getMonth() + 1) + "/" + fecha.getFullYear());
+                pdf.save('ReporteAdminsColegio.pdf');
+                swal('Exito', "Reporte Imprimido Exitosamente..", 'success');
+            }
+    );
 }

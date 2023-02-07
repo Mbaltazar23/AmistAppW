@@ -126,6 +126,11 @@ class Categorias extends Controllers {
         die();
     }
 
+    public function getCategoriasReport() {
+        $listCategorias = $this->model->selectCategorias();
+        echo json_encode($listCategorias, JSON_UNESCAPED_UNICODE);
+   }
+
 }
 
 ?>

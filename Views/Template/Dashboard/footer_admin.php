@@ -18,7 +18,7 @@
 <script src="<?= media() ?>/js/plugins/jquery-ui/jquery-ui.min.js"></script>
 <script src="<?= media() ?>/js/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- DataTables  & js/Plugins -->
-<script src="<?= media() ?>/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?= media() ?>/js/plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="<?= media() ?>/js/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="<?= media() ?>/js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="<?= media() ?>/js/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
