@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 06-02-2023 a las 21:05:22
+-- Tiempo de generación: 16-02-2023 a las 05:33:54
 -- Versión del servidor: 10.4.6-MariaDB
 -- Versión de PHP: 7.3.9
 
@@ -36,6 +36,14 @@ CREATE TABLE `acciones` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `acciones`
+--
+
+INSERT INTO `acciones` (`id`, `nombre`, `puntos`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Comer Manzanas', 50, 1, '2023-02-07 19:34:03', '2023-02-07 19:44:39'),
+(2, 'Pegar Penaltis', 50, 1, '2023-02-10 22:18:21', '2023-02-10 22:18:21');
 
 -- --------------------------------------------------------
 
@@ -207,7 +215,7 @@ CREATE TABLE `preguntas` (
 --
 
 INSERT INTO `preguntas` (`id`, `pregunta`, `notificacion_id`, `created_at`) VALUES
-(1, 'Cuanto Es 2 +4', 1, '2023-02-01 04:20:38'),
+(1, 'Cuanto Es La Suma De 5+7', 1, '2023-02-01 04:20:38'),
 (4, 'Nos Gustaria Dar La Bienvenida De Año Este 2023', 4, '2023-02-02 19:46:38'),
 (5, 'Que Te Gustaria Comer?', 1, '2023-02-03 02:57:53'),
 (7, 'Cual Es El Clima De Hoy', 1, '2023-02-04 03:07:24'),
@@ -301,7 +309,7 @@ CREATE TABLE `respuestas` (
 
 INSERT INTO `respuestas` (`id`, `pregunta_id`, `respuesta`, `consejo`, `created_at`) VALUES
 (1, 1, 'La respuesta es 5', 'Error, no se gano el puntaje', '2023-02-01 04:20:38'),
-(2, 1, 'Fg', 'Fhfh', '2023-02-01 04:20:38'),
+(2, 1, 'La respuesta es 7', 'Fhfh', '2023-02-01 04:20:38'),
 (3, 1, 'Fg', 'Fhfh', '2023-02-01 04:20:38'),
 (10, 4, 'A lo cual le regalamos este premi', 'Disfrutelo con todos ustedes', '2023-02-02 19:46:38'),
 (11, 5, 'Quiero un flan', 'Ya.. aqui te dejo esto para que la coma', '2023-02-03 02:57:53'),
@@ -514,7 +522,7 @@ ALTER TABLE `usuario_notificaciones`
 -- AUTO_INCREMENT de la tabla `acciones`
 --
 ALTER TABLE `acciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `canjear_productos`

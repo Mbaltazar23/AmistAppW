@@ -16,7 +16,7 @@ class Productos extends Controllers {
         $data['page_title'] = "Productos";
         $data['page_name'] = "productos";
         $data['rol-personal'] = $_SESSION['rol'];
-        $data['page_functions_js'] = "functions_products.js";
+        $data['page_functions_js'] = "ejm.js";
         $this->views->getView($this, "productos", $data);
     }
 
@@ -28,14 +28,14 @@ class Productos extends Controllers {
             $btnDelete = '';
             if ($arrData[$i]['status'] == 1) {
                 $arrData[$i]['status'] = '<span class="badge badge-success">Activo</span>';
-                $btnView = '<button class="btn btn-info btn-sm" onClick="fntViewInfo(' . $arrData[$i]['id'] . ')" title="Ver producto"><i class="far fa-eye"></i></button>';
-                $btnEdit = '<button class="btn btn-primary  btn-sm" onClick="fntEditInfo(this,' . $arrData[$i]['id'] . ')" title="Editar producto"><i class="fas fa-pencil-alt"></i></button>';
-                $btnDelete = '<button class="btn btn-danger btn-sm" onClick="fntDelInfo(' . $arrData[$i]['id'] . ')" title="Eliminar producto"><i class="far fa-trash-alt"></i></button>';
+                $btnView = '<button class="btn btn-info btn-sm" v-on:click="fntViewInfo(' . $arrData[$i]['id'] . ')" title="Ver producto"><i class="far fa-eye"></i></button>';
+                $btnEdit = '<button class="btn btn-primary btn-sm" v-on:click="fntEditInfo(this,' . $arrData[$i]['id'] . ')" title="Editar producto"><i class="fas fa-pencil-alt"></i></button>';
+                $btnDelete = '<button class="btn btn-danger btn-sm" v-on:click="fntDelInfo(' . $arrData[$i]['id'] . ')" title="Eliminar producto"><i class="far fa-trash-alt"></i></button>';
             } else {
                 $arrData[$i]['status'] = '<span class="badge badge-danger">Inactivo</span>';
-                $btnView = '<button class="btn btn-secondary btn-sm" onClick="fntViewInfo(' . $arrData[$i]['id'] . ')" title="Ver producto" disabled><i class="far fa-eye"></i></button>';
-                $btnEdit = '<button class="btn btn-secondary  btn-sm" onClick="fntEditInfo(this,' . $arrData[$i]['id'] . ')" title="Editar producto" disabled><i class="fas fa-pencil-alt"></i></button>';
-                $btnDelete = '<button class="btn btn-dark btn-sm" onClick="fntActiveInfo(' . $arrData[$i]['id'] . ')" title="Activar producto"><i class="fas fa-toggle-on"></i></button>';
+                $btnView = '<button class="btn btn-secondary btn-sm" v-on:click="fntViewInfo(' . $arrData[$i]['id'] . ')" title="Ver producto" disabled><i class="far fa-eye"></i></button>';
+                $btnEdit = '<button class="btn btn-secondary  btn-sm" v-on:click="fntEditInfo(this,' . $arrData[$i]['id'] . ')" title="Editar producto" disabled><i class="fas fa-pencil-alt"></i></button>';
+                $btnDelete = '<button class="btn btn-dark btn-sm" v-on:click="fntActiveInfo(' . $arrData[$i]['id'] . ')" title="Activar producto"><i class="fas fa-toggle-on"></i></button>';
             }
             $arrData[$i]["nombreP"] = "<img src='" . media() . "/img/products/" . $arrData[$i]["imagen"] . "'alt='" . $arrData[$i]["nombre"] . "' class='img-circle img-size-32 mr-2'>" . $arrData[$i]["nombre"];
 

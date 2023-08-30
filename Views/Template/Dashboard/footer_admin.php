@@ -10,13 +10,13 @@
 </aside>
 <!-- /.control-sidebar -->
 </div>
-<!-- ./wrapper -->
 
 <!-- jQuery -->
 <script src="<?= media() ?>/js/plugins/jquery/jquery.min.js"></script>
+<!-- Vue Js -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="<?= media() ?>/js/plugins/jquery-ui/jquery-ui.min.js"></script>
-<script src="<?= media() ?>/js/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- DataTables  & js/Plugins -->
 <script src="<?= media() ?>/js/plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
 <script src="<?= media() ?>/js/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>

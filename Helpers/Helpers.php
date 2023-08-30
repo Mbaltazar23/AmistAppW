@@ -229,8 +229,23 @@ function navDashboardAdmin() {
                 )
             )
         );
-    }else if ($_SESSION['rol'] == ROLADMINCOLE) {
-        
+    } else if ($_SESSION['rol'] == ROLADMINCOLE) {
+        $navAdmin = array(
+            "Educacion" => array(
+                "icon" => "fas fa-regular fa-award",
+                "submodulos" => array(
+                    "Cursos" => array("pagina" => "cursos"),
+                    "Alumnos" => array("pagina" => "alumnos"),
+                    "Profesores" => array("pagina" => "profesores"),
+                )
+            ),
+            "Catalogo" => array(
+                "icon" => "fas fa-solid fa-school",
+                "submodulos" => array(
+                    "Productos" => array("pagina" => "productos")
+                )
+            )
+        );
     }
     return $navAdmin;
 }

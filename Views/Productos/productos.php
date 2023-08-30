@@ -3,7 +3,7 @@ headerAdmin($data);
 getModal('modalProductos', $data);
 ?>
 
-<div class="content-wrapper">
+<div class="content-wrapper" id="app-product">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <div class="container-fluid">
@@ -35,7 +35,7 @@ getModal('modalProductos', $data);
                                         <?= $data['page_title'] ?>
                                     </button>
                                     <div class="dropdown-menu" role="menu">
-                                        <a class="dropdown-item" onclick="openModal();">Nuevo</a>
+                                        <a class="dropdown-item" @click.onclick="openModal">Nuevo</a>
                                         <a class="dropdown-item" >Generar Reporte</a>
                                     </div>
                                 </div>
